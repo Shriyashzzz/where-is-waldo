@@ -1,0 +1,19 @@
+{
+  "name": "where-is-waldo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "concurrently": "^10.0.5"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.12"
+  }
+}

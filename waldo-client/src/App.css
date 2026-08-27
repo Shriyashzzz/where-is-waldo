@@ -1,3 +1,15 @@
 @import "tailwindcss";
 @import "tailwindcss/preflight.css" layer(base);
-import "@radix-ui/themes/styles.css";
+@font-face {
+  font-family: "Yuyu";
+  src:
+    url("./assets/fonts/Yuyu-Regular.woff2") format("woff2"),
+    url("./assets/fonts/Yuyu-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-yuyu: "Yuyu", sans-serif;
+}

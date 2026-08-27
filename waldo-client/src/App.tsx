@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="bg-sky-200 h-screen">
+      <main className="bg-sky-200 h-screen flex justify-center ">
         <Outlet />
       </main>
     </>

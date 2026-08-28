@@ -38,7 +38,7 @@ export default function Magnifier({ src, alt }: Prop) {
       onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
         handleMouseMove(e)
       }
-      className="relative overflow-hidden cursor-none select-none min-w-full h-full max-w-xl"
+      className="relative overflow-hidden cursor-crosshair select-none min-w-full h-full max-w-xl"
     >
       <img
         src={src}

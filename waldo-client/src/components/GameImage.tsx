@@ -12,6 +12,11 @@ export default function Magnifier({ src, alt }: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
 
+  const handleImageClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    console.log(e);
+  };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (containerRef && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -38,6 +43,7 @@ export default function Magnifier({ src, alt }: Prop) {
       onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
         handleMouseMove(e)
       }
+      onClick={handleImageClick}
       className="relative overflow-hidden cursor-crosshair select-none min-w-full h-full max-w-xl"
     >
       <img

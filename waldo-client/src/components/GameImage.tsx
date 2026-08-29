@@ -1,21 +1,56 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
+import type { MouseCordinate, ContainerCoordinate } from "../types/coordinate";
+import { calculateClickedArea } from "../util/calculateClickArea";
 
 const ZOOM = 2;
 
 interface Prop {
   src: string;
   alt: string;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function Magnifier({ src, alt }: Prop) {
-  const containerRef = useRef<HTMLDivElement>(null);
+interface OriginalCordinate {
+  originalX: number;
+  originalY: number;
+}
+
+export default function Magnifier({ src, alt, containerRef }: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
 
   const handleImageClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    console.log(e);
+    const mouseCordinate: MouseCordinate = {
+      X: e.clientX,
+      Y: e.clientY,
+    };
+
+    const containerCordinate: ContainerCoordinate = {
+      left: containerRef.current
+        ? containerRef.current.getBoundingClientRect().left
+        : null,
+      top: containerRef.current
+        ? containerRef.current.getBoundingClientRect().top
+        : null,
+      width: containerRef.current
+        ? containerRef.current.getBoundingClientRect().width
+        : null,
+      height: containerRef.current
+        ? containerRef.current.getBoundingClientRect().height
+        : null,
+    };
+
+    if (!containerCordinate.left || !containerCordinate.top) return;
+
+    const scaledCordinate: OriginalCordinate | undefined = calculateClickedArea(
+      containerCordinate,
+      mouseCordinate,
+      2477, // get this from the backend later
+      1440, // get this from the backend later
+    );
+    console.log(scaledCordinate);
   };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (containerRef && containerRef.current) {
@@ -49,7 +84,7 @@ export default function Magnifier({ src, alt }: Prop) {
       <img
         src={src}
         alt={alt}
-        className="w-full h-full block"
+        className="w-full h-full block object-fill"
         draggable={false}
       />
       <div

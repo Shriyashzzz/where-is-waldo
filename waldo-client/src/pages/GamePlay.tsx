@@ -1,10 +1,17 @@
 import Magnifier from "../components/GameImage.js";
 import WaldoImage from "../assets/images/easy.png"; // use the image fetched from the after backend is made
-import { useRef } from "react";
+import { useRef, useState } from "react";
+export interface OriginalCordinate {
+  originalX: number;
+  originalY: number;
+}
 
 export function PlayGame() {
   const imgContainer = useRef<HTMLDivElement | null>(null);
-
+  const [originalImgProp, setOriginalImgProp] = useState<OriginalCordinate>({
+    originalX: 2477,
+    originalY: 1440,
+  }); // update this after image fetch
   return (
     <section className="w-4/5 h-4/5 bg-gray-100 mt-3 relative">
       {/* Fetch the image from the server*/}
@@ -12,6 +19,7 @@ export function PlayGame() {
         src={WaldoImage}
         alt="Waldo Game"
         containerRef={imgContainer}
+        originalImageProp={originalImgProp}
       />
     </section>
   );

@@ -1,21 +1,23 @@
 import { useState } from "react";
 import type { MouseCordinate, ContainerCoordinate } from "../types/coordinate";
 import { calculateClickedArea } from "../util/calculateClickArea";
+import type { OriginalCordinate } from "../pages/GamePlay";
 
-const ZOOM = 2;
+const ZOOM = 2; // make this an state later
 
 interface Prop {
   src: string;
   alt: string;
+  originalImageProp: OriginalCordinate;
   containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-interface OriginalCordinate {
-  originalX: number;
-  originalY: number;
-}
-
-export default function Magnifier({ src, alt, containerRef }: Prop) {
+export default function Magnifier({
+  src,
+  alt,
+  containerRef,
+  originalImageProp,
+}: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
 
@@ -47,9 +49,10 @@ export default function Magnifier({ src, alt, containerRef }: Prop) {
     const scaledCordinate: OriginalCordinate | undefined = calculateClickedArea(
       containerCordinate,
       mouseCordinate,
-      2477, // get this from the backend later
-      1440, // get this from the backend later
+      originalImageProp.originalX, // get this from the backend
+      originalImageProp.originalY, // get this from the backend
     );
+    // send scaled coordinate to the server for checks
     console.log(scaledCordinate);
   };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -92,6 +95,7 @@ export default function Magnifier({ src, alt, containerRef }: Prop) {
           pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2
           ${visible ? "block" : "hidden"}`}
         style={lensStyle}
+        onClick={handleImageClick}
       />
     </div>
   );

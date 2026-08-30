@@ -49,10 +49,10 @@ export default function Magnifier({
     const scaledCordinate: OriginalCordinate | undefined = calculateClickedArea(
       containerCordinate,
       mouseCordinate,
-      originalImageProp.originalX, // get this from the backend
-      originalImageProp.originalY, // get this from the backend
+      originalImageProp.originalX,
+      originalImageProp.originalY,
     );
-    // send scaled coordinate to the server for checks
+
     console.log(scaledCordinate);
   };
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -82,12 +82,12 @@ export default function Magnifier({
         handleMouseMove(e)
       }
       onClick={handleImageClick}
-      className="relative overflow-hidden cursor-crosshair select-none min-w-full h-full max-w-xl"
+      className="relative overflow-hidden cursor-crosshair select-none min-w-fit h-full max-w-xl"
     >
       <img
         src={src}
         alt={alt}
-        className="w-full h-full block object-fill"
+        className="w-full h-full block object-contain"
         draggable={false}
       />
       <div
@@ -95,7 +95,6 @@ export default function Magnifier({
           pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2
           ${visible ? "block" : "hidden"}`}
         style={lensStyle}
-        onClick={handleImageClick}
       />
     </div>
   );

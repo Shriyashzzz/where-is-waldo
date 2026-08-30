@@ -1,4 +1,4 @@
-import waldoPreview from "../assets/images/easy.png";
+import waldoPreview from "../../public/assets/images/gameImage/game.jpg";
 import { Button } from "@radix-ui/themes";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router";

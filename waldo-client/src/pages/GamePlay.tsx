@@ -1,5 +1,5 @@
 import Magnifier from "../components/GameImage.js";
-import WaldoImage from "../assets/images/easy.png"; // use the image fetched from the after backend is made
+import WaldoImage from "../../public/assets/images/gameImage/game.jpg";
 import { useRef, useState } from "react";
 export interface OriginalCordinate {
   originalX: number;
@@ -9,12 +9,11 @@ export interface OriginalCordinate {
 export function PlayGame() {
   const imgContainer = useRef<HTMLDivElement | null>(null);
   const [originalImgProp, setOriginalImgProp] = useState<OriginalCordinate>({
-    originalX: 2477,
-    originalY: 1440,
-  }); // update this after image fetch
+    originalX: 1280,
+    originalY: 864,
+  });
   return (
-    <section className="w-4/5 h-4/5 bg-gray-100 mt-3 relative">
-      {/* Fetch the image from the server*/}
+    <section className="w-4/5 h-fit bg-inherit mt-3 relative flex items-center justify-center ">
       <Magnifier
         src={WaldoImage}
         alt="Waldo Game"

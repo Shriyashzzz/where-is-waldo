@@ -1,12 +1,7 @@
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import type { OriginalCordinate } from "../pages/GamePlay";
 import { CharachterAvatar } from "./CharachterAvatar";
-import WaldoAvatar1 from "../../public/assets/images/game/characters/waldo1.png";
-import WaldoAvatar2 from "../../public/assets/images/game/characters/waldo2.png";
-import WaldoAvatar3 from "../../public/assets/images/game/characters/waldo3.png";
-import WaldoAvatar4 from "../../public/assets/images/game/characters/waldo4.png";
-import WaldoAvatar5 from "../../public/assets/images/game/characters/waldo5.png";
-import { useState } from "react";
+import { useCharacter } from "../hooks/store";
 
 interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
@@ -15,18 +10,17 @@ interface Props {
 }
 
 export function FoundAlert({ scaledCoordinate, isClicked, setIsOpen }: Props) {
-  const [avatars, setAvatars] = useState([
-    { img: WaldoAvatar1, found: false },
-    { img: WaldoAvatar2, found: false },
-    { img: WaldoAvatar3, found: false },
-    { img: WaldoAvatar4, found: false },
-    { img: WaldoAvatar5, found: false },
-    ,
-  ]); // maybe use redux to store this as global store so you can show avatars to find it on the gamplay page with state management on if they have been found or not
+  const avatars = useCharacter((s) => s.avatars); //zustand store
+  const setAvatar = useCharacter((s) => s.updateAvatar);
   const handleCharachterClick = (index: number) => {
     if (avatars[index]?.found) return;
     console.log(scaledCoordinate); // send this scaled cordinate to server for checks together with the charachter selected
     console.log(index);
+    //get the response from the server
+    //imagining the charchter clicked is teh correct charachter
+    const tempAvatar = [...avatars];
+    tempAvatar[index].found = true;
+    setAvatar(tempAvatar);
     //ensure to show loading when fetching disable when true, maybe use redux state management for counter
   };
   return (
@@ -42,7 +36,6 @@ export function FoundAlert({ scaledCoordinate, isClicked, setIsOpen }: Props) {
             );
           })}
         </div>
-
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
             <Button

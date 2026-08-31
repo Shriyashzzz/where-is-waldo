@@ -1,26 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { MouseCordinate, ContainerCoordinate } from "../types/coordinate";
 import { calculateClickedArea } from "../util/calculateClickArea";
 import type { OriginalCordinate } from "../pages/GamePlay";
+import { FoundAlert } from "./FoundAlert";
+import waldoEasy from "../../public/assets/images/game/levels/easy.jpg";
+import waldoMedium from "../../public/assets/images/game/levels/medium.jpg";
+import waldoHard from "../../public/assets/images/game/levels/hard.jpg";
+import waldoGodMode from "../../public/assets/images/game/levels/godMode.jpg";
+import { useParams } from "react-router";
 
 const ZOOM = 2; // make this an state later
 
 interface Prop {
-  src: string;
-  alt: string;
   originalImageProp: OriginalCordinate;
   containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function Magnifier({
-  src,
-  alt,
+export default function ImageContainer({
   containerRef,
   originalImageProp,
 }: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
-
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [gameImage, setGameImg] = useState<string>("");
+  const [scaledCoordinate, setScaledCoordiane] = useState<
+    OriginalCordinate | undefined
+  >({ originalX: 0, originalY: 0 });
+  const { gameNumber } = useParams<string>();
+  useEffect(() => {
+    switch (gameNumber) {
+      case "1":
+        setGameImg(waldoEasy);
+        return;
+      case "2":
+        setGameImg(waldoMedium);
+        return;
+      case "3":
+        setGameImg(waldoHard);
+        return;
+      case "4":
+        setGameImg(waldoGodMode);
+        return;
+    }
+  }, []);
+  // handles imageclicks
   const handleImageClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -46,15 +70,17 @@ export default function Magnifier({
 
     if (!containerCordinate.left || !containerCordinate.top) return;
 
-    const scaledCordinate: OriginalCordinate | undefined = calculateClickedArea(
-      containerCordinate,
-      mouseCordinate,
-      originalImageProp.originalX,
-      originalImageProp.originalY,
-    );
-
-    console.log(scaledCordinate);
+    const calculatedScaledCoordinate: OriginalCordinate | undefined =
+      calculateClickedArea(
+        containerCordinate,
+        mouseCordinate,
+        originalImageProp.originalX,
+        originalImageProp.originalY,
+      );
+    setScaledCoordiane(calculatedScaledCoordinate);
+    setIsClicked(true);
   };
+  // handles mouse move on maginifying glass
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (containerRef && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -66,7 +92,7 @@ export default function Magnifier({
       setLensStyle({
         left: `${x}px`,
         top: `${y}px`,
-        backgroundImage: `url(${src})`,
+        backgroundImage: `url(${gameImage})`,
         backgroundPosition: `${bgX}% ${bgY}%`,
         backgroundSize: `${rect.width * ZOOM}px ${rect.height * ZOOM}px`,
       });
@@ -79,21 +105,28 @@ export default function Magnifier({
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
       onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-        handleMouseMove(e)
+        !isClicked && handleMouseMove(e)
       }
-      onClick={handleImageClick}
+      onClick={(e) => !isClicked && handleImageClick(e)}
       className="relative overflow-hidden cursor-crosshair select-none min-w-fit h-full max-w-xl"
     >
+      {isClicked && (
+        <FoundAlert
+          isClicked={isClicked}
+          setIsOpen={setIsClicked}
+          scaledCoordinate={scaledCoordinate}
+        />
+      )}
+
       <img
-        src={src}
-        alt={alt}
+        src={gameImage}
         className="w-full h-full block object-contain"
         draggable={false}
       />
       <div
         className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
           pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2
-          ${visible ? "block" : "hidden"}`}
+          ${visible && !isClicked ? "block" : "hidden"}`}
         style={lensStyle}
       />
     </div>

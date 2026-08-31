@@ -1,16 +1,21 @@
 import { Avatar } from "radix-ui";
 
+export interface AvatarObj {
+  img: string;
+  found: boolean;
+}
+
 interface Props {
-  imgSrc: string;
+  avatarObj: AvatarObj | undefined;
   name: string;
 }
 
-export function CharachterAvatar({ imgSrc, name }: Props) {
+export function CharachterAvatar({ avatarObj, name }: Props) {
   return (
     <Avatar.Root className="inline-flex size-11.25 select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
       <Avatar.Image
-        className="size-full rounded-[inherit] object-cover"
-        src={imgSrc}
+        className={`size-full rounded-[inherit] object-contain cursor-pointer ${avatarObj && avatarObj.found && "pointer-events-none grayscale opacity-50"}`}
+        src={avatarObj ? avatarObj.img : ""}
         alt={name}
       />
       <Avatar.Fallback

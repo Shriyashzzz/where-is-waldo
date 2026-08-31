@@ -46,6 +46,7 @@ export function FoundAlert({ scaledCoordinate, isClicked, setIsOpen }: Props) {
           <AlertDialog.Cancel>
             <Button
               onClick={() => setIsOpen(false)}
+              style={{ cursor: "pointer" }}
               variant="soft"
               color="gray"
             >

@@ -13,7 +13,7 @@ export function Header() {
       >
         <img
           src={waldoStanding}
-          alt=""
+          alt="game image"
           className="w-25 h-full object-cover m-0 p-0"
         />
         <img

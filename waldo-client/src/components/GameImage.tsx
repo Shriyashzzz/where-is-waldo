@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { MouseCordinate, ContainerCoordinate } from "../types/coordinate";
 import { calculateClickedArea } from "../util/calculateClickArea";
 import type { OriginalCordinate } from "../pages/GamePlay";
@@ -12,18 +12,16 @@ import { useParams } from "react-router";
 const ZOOM = 2; // make this an state later
 
 interface Prop {
-  originalImageProp: OriginalCordinate;
   containerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function ImageContainer({
-  containerRef,
-  originalImageProp,
-}: Prop) {
+export default function ImageContainer({ containerRef }: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [gameImage, setGameImg] = useState<string>("");
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const LENS_SIZE = 128;
   const [scaledCoordinate, setScaledCoordiane] = useState<
     OriginalCordinate | undefined
   >({ originalX: 0, originalY: 0 });
@@ -54,29 +52,21 @@ export default function ImageContainer({
     };
 
     const containerCordinate: ContainerCoordinate = {
-      left: containerRef.current
-        ? containerRef.current.getBoundingClientRect().left
-        : null,
-      top: containerRef.current
-        ? containerRef.current.getBoundingClientRect().top
-        : null,
-      width: containerRef.current
-        ? containerRef.current.getBoundingClientRect().width
-        : null,
-      height: containerRef.current
-        ? containerRef.current.getBoundingClientRect().height
-        : null,
+      left: containerRef.current?.getBoundingClientRect().left ?? null,
+      top: containerRef.current?.getBoundingClientRect().top ?? null,
+      width: containerRef.current?.getBoundingClientRect().width ?? null,
+      height: containerRef.current?.getBoundingClientRect().height ?? null,
     };
 
     if (!containerCordinate.left || !containerCordinate.top) return;
+    if (!imgRef.current) return;
 
-    const calculatedScaledCoordinate: OriginalCordinate | undefined =
-      calculateClickedArea(
-        containerCordinate,
-        mouseCordinate,
-        originalImageProp.originalX,
-        originalImageProp.originalY,
-      );
+    const calculatedScaledCoordinate = calculateClickedArea(
+      containerCordinate,
+      mouseCordinate,
+      imgRef.current.naturalWidth,
+      imgRef.current.naturalHeight,
+    );
     setScaledCoordiane(calculatedScaledCoordinate);
     setIsClicked(true);
   };
@@ -86,19 +76,15 @@ export default function ImageContainer({
       const rect = containerRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      const bgX = (x / rect.width) * 100;
-      const bgY = (y / rect.height) * 100;
-
       setLensStyle({
         left: `${x}px`,
         top: `${y}px`,
         backgroundImage: `url(${gameImage})`,
-        backgroundPosition: `${bgX}% ${bgY}%`,
         backgroundSize: `${rect.width * ZOOM}px ${rect.height * ZOOM}px`,
+        backgroundPosition: `${-(x * ZOOM - LENS_SIZE / 2)}px ${-(y * ZOOM - LENS_SIZE / 2)}px`,
       });
     }
   };
-
   return (
     <div
       ref={containerRef}
@@ -119,6 +105,7 @@ export default function ImageContainer({
       )}
 
       <img
+        ref={imgRef}
         src={gameImage}
         className="w-full h-full block object-contain"
         draggable={false}

@@ -46,7 +46,7 @@ export function HomePage() {
                   size={"2"}
                   style={{ cursor: "pointer" }}
                   onClick={() =>
-                    navigate("/leaderboard", { viewTransition: true })
+                    navigate(`/leaderboard/${index}`, { viewTransition: true })
                   }
                 >
                   Leaderboard

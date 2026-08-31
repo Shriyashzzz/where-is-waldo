@@ -8,7 +8,7 @@ export interface OriginalCordinate {
 export function PlayGame() {
   const imgContainer = useRef<HTMLDivElement | null>(null);
   return (
-    <section className="w-4/5 h-fit bg-inherit mt-3 relative flex items-center justify-center m-8">
+    <section className="w-4/5 h-fit bg-inherit mt-18 relative flex items-center justify-center m-8">
       <ImageContainer containerRef={imgContainer} />
     </section>
   );

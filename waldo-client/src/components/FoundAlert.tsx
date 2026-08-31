@@ -22,11 +22,12 @@ export function FoundAlert({ scaledCoordinate, isClicked, setIsOpen }: Props) {
     { img: WaldoAvatar4, found: false },
     { img: WaldoAvatar5, found: false },
     ,
-  ]);
+  ]); // maybe use redux to store this as global store so you can show avatars to find it on the gamplay page with state management on if they have been found or not
   const handleCharachterClick = (index: number) => {
     if (avatars[index]?.found) return;
     console.log(scaledCoordinate); // send this scaled cordinate to server for checks together with the charachter selected
     console.log(index);
+    //ensure to show loading when fetching disable when true, maybe use redux state management for counter
   };
   return (
     <AlertDialog.Root open={isClicked}>

@@ -21,7 +21,7 @@ export default function ImageContainer({ containerRef }: Prop) {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [gameImage, setGameImg] = useState<string>("");
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const LENS_SIZE = 128;
+  const LENS_SIZE = 128; // to fit w-32, h-32 maginifying glass
   const [scaledCoordinate, setScaledCoordiane] = useState<
     OriginalCordinate | undefined
   >({ originalX: 0, originalY: 0 });

@@ -7,12 +7,12 @@ export interface AvatarObj {
 
 interface Props {
   avatarObj: AvatarObj | undefined;
-  name: string;
+  name?: string;
 }
 
 export function CharachterAvatar({ avatarObj, name }: Props) {
   return (
-    <Avatar.Root className="inline-flex size-11.25 select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle">
+    <Avatar.Root className="inline-flex size-11.25 select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle bg-white p-1">
       <Avatar.Image
         className={`size-full rounded-[inherit] object-contain cursor-pointer ${avatarObj && avatarObj.found && "pointer-events-none grayscale opacity-50"}`}
         src={avatarObj ? avatarObj.img : ""}

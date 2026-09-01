@@ -1,5 +1,7 @@
 import ImageContainer from "../components/GameImage.js";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
+
 export interface OriginalCordinate {
   originalX: number;
   originalY: number;
@@ -8,8 +10,11 @@ export interface OriginalCordinate {
 export function PlayGame() {
   const imgContainer = useRef<HTMLDivElement | null>(null);
   return (
-    <section className="w-4/5 h-fit bg-inherit mt-18 relative flex items-center justify-center m-8">
-      <ImageContainer containerRef={imgContainer} />
-    </section>
+    <div className="flex items-center justify-center m-10">
+      <section className="w-4/5 h-fit bg-inherit relative flex items-center justify-center">
+        <ImageContainer containerRef={imgContainer} />
+      </section>
+      <SideCharachterWaldo />
+    </div>
   );
 }

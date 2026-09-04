@@ -13,14 +13,19 @@ const ZOOM = 2; // make this an state later
 
 interface Prop {
   containerRef: React.RefObject<HTMLDivElement | null>;
+  imgRef: React.RefObject<HTMLImageElement | null>;
+  currentImgScale: number;
 }
 
-export default function ImageContainer({ containerRef }: Prop) {
+export default function ImageContainer({
+  containerRef,
+  imgRef,
+  currentImgScale,
+}: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [gameImage, setGameImg] = useState<string>("");
-  const imgRef = useRef<HTMLImageElement | null>(null);
   const LENS_SIZE = 128; // to fit w-32, h-32 maginifying glass
   const [scaledCoordinate, setScaledCoordiane] = useState<
     OriginalCordinate | undefined
@@ -58,7 +63,8 @@ export default function ImageContainer({ containerRef }: Prop) {
       height: containerRef.current?.getBoundingClientRect().height ?? null,
     };
 
-    if (!containerCordinate.left || !containerCordinate.top) return;
+    if (containerCordinate.left === null || containerCordinate.top === null)
+      return;
     if (!imgRef.current) return;
 
     const calculatedScaledCoordinate = calculateClickedArea(
@@ -93,8 +99,10 @@ export default function ImageContainer({ containerRef }: Prop) {
       onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
         !isClicked && handleMouseMove(e)
       }
-      onClick={(e) => !isClicked && handleImageClick(e)}
-      className="relative flex justify-center items-center overflow-hidden cursor-crosshair select-none h-fit md:h-full w-full"
+      onClick={(e) => {
+        !isClicked && handleImageClick(e);
+      }}
+      className="relative flex justify-center flex-col items-center overflow-hidden cursor-crosshair select-none h-fit md:h-full w-full"
     >
       {isClicked && (
         <FoundAlert
@@ -103,15 +111,15 @@ export default function ImageContainer({ containerRef }: Prop) {
           scaledCoordinate={scaledCoordinate}
         />
       )}
-
       <img
         ref={imgRef}
         src={gameImage}
-        className="max-w-full max-h-full block object-fill"
+        className={`max-w-full max-h-full block object-cover overflow-scroll`}
+        style={{ transform: `scale(${currentImgScale})` }}
         draggable={false}
       />
       <div
-        className={`absolute w-32 h-32 rounded-full border-4 md:block hidden border-white/80 shadow-lg
+        className={`absolute w-32 h-32 rounded-full md:block hidden border-4 border-white/80 shadow-lg
           pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2
           ${visible && !isClicked ? "block" : "hidden"}`}
         style={lensStyle}

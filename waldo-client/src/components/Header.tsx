@@ -1,5 +1,5 @@
-import waldoBoard from "../../public/assets/logo/where-waldo-board.svg";
-import waldoStanding from "../../public/assets/logo/waldo-standing.svg";
+import waldoBoard from "../assets/logo/where-waldo-board.svg";
+import waldoStanding from "../assets/logo/waldo-standing.svg";
 import { useNavigate } from "react-router";
 
 export function Header() {

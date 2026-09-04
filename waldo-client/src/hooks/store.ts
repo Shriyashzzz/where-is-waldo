@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import WaldoAvatar1 from "../../public/assets/images/game/characters/waldo1.png";
-import WaldoAvatar2 from "../../public/assets/images/game/characters/waldo2.png";
-import WaldoAvatar3 from "../../public/assets/images/game/characters/waldo3.png";
-import WaldoAvatar4 from "../../public/assets/images/game/characters/waldo4.png";
-import WaldoAvatar5 from "../../public/assets/images/game/characters/waldo5.png";
+import WaldoAvatar1 from "../../src/assets/images/game/characters/waldo1.png";
+import WaldoAvatar2 from "../../src/assets/images/game/characters/waldo2.png";
+import WaldoAvatar3 from "../../src/assets/images/game/characters/waldo3.png";
+import WaldoAvatar4 from "../../src/assets/images/game/characters/waldo4.png";
+import WaldoAvatar5 from "../../src/assets/images/game/characters/waldo5.png";
 
 interface Avatar {
   img: string;

@@ -1,7 +1,7 @@
-import waldoEasy from "../../public/assets/images/game/levels/easy.jpg";
-import waldoMedium from "../../public/assets/images/game/levels/medium.jpg";
-import waldoHard from "../../public/assets/images/game/levels/hard.jpg";
-import waldoGodMode from "../../public/assets/images/game/levels/godMode.jpg";
+import waldoEasy from "../assets/images/game/levels/easy.jpg";
+import waldoMedium from "../assets/images/game/levels/medium.jpg";
+import waldoHard from "../assets/images/game/levels/hard.jpg";
+import waldoGodMode from "../assets/images/game/levels/godMode.jpg";
 import { Button } from "@radix-ui/themes";
 import { useNavigate } from "react-router";
 

@@ -10,8 +10,8 @@ export interface OriginalCordinate {
 export function PlayGame() {
   const imgContainer = useRef<HTMLDivElement | null>(null);
   return (
-    <div className="flex items-center justify-center m-10">
-      <section className="w-4/5 h-fit bg-inherit relative flex items-center justify-center">
+    <div className="flex flex-col items-center md:flex-row justify-center m-10">
+      <section className="h-fit md:h-full w-full bg-inherit flex items-center justify-center">
         <ImageContainer containerRef={imgContainer} />
       </section>
       <SideCharachterWaldo />

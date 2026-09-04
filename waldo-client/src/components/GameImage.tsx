@@ -3,10 +3,10 @@ import type { MouseCordinate, ContainerCoordinate } from "../types/coordinate";
 import { calculateClickedArea } from "../util/calculateClickArea";
 import type { OriginalCordinate } from "../pages/GamePlay";
 import { FoundAlert } from "./FoundAlert";
-import waldoEasy from "../../public/assets/images/game/levels/easy.jpg";
-import waldoMedium from "../../public/assets/images/game/levels/medium.jpg";
-import waldoHard from "../../public/assets/images/game/levels/hard.jpg";
-import waldoGodMode from "../../public/assets/images/game/levels/godMode.jpg";
+import waldoEasy from "../../src/assets/images/game/levels/easy.jpg";
+import waldoMedium from "../../src/assets/images/game/levels/medium.jpg";
+import waldoHard from "../../src/assets/images/game/levels/hard.jpg";
+import waldoGodMode from "../../src/assets/images/game/levels/godMode.jpg";
 import { useParams } from "react-router";
 
 const ZOOM = 2; // make this an state later
@@ -94,7 +94,7 @@ export default function ImageContainer({ containerRef }: Prop) {
         !isClicked && handleMouseMove(e)
       }
       onClick={(e) => !isClicked && handleImageClick(e)}
-      className="relative overflow-hidden cursor-crosshair select-none min-w-fit h-full max-w-xl"
+      className="relative flex justify-center items-center overflow-hidden cursor-crosshair select-none h-fit md:h-full w-full"
     >
       {isClicked && (
         <FoundAlert
@@ -107,11 +107,11 @@ export default function ImageContainer({ containerRef }: Prop) {
       <img
         ref={imgRef}
         src={gameImage}
-        className="w-full h-full block object-contain"
+        className="max-w-full max-h-full block object-fill"
         draggable={false}
       />
       <div
-        className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
+        className={`absolute w-32 h-32 rounded-full border-4 md:block hidden border-white/80 shadow-lg
           pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2
           ${visible && !isClicked ? "block" : "hidden"}`}
         style={lensStyle}

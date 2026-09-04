@@ -5,31 +5,29 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "contract:emit": "prisma contract emit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@prisma/orm-postgres": "^8.0.0-rc.8",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
-    "loadash": "^1.0.0",
-    "pg": "^8.23.0",
-    "prisma": "^6.19.3"
+    "force": "^0.0.3",
+    "pg": "^8.23.0"
   },
   "devDependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
-    "@babel/preset-typescript": "^8.0.1",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
+    "@types/node": "^26.4.1",
     "@types/supertest": "^7.2.1",
-    "babel-jest": "^30.4.1",
     "jest": "^30.4.2",
     "supertest": "^7.2.2",
-    "tsx": "^4.23.12",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }
 }

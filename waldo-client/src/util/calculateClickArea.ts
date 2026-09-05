@@ -3,8 +3,10 @@ import type { ContainerCoordinate, MouseCordinate } from "../types/coordinate";
 export function calculateClickedArea(
   containerProp: ContainerCoordinate,
   mouseCordinate: MouseCordinate,
-  imgWidth: number,
-  imgHeight: number,
+  imgWidth: number, // naturalWidth — used for the final ratio conversion
+  imgHeight: number, // naturalHeight
+  renderedWidth: number, // img.offsetWidth — actual unscaled layout size
+  renderedHeight: number, // img.offsetHeight
   scale: number,
   scrollLeft: number,
   scrollTop: number,
@@ -18,21 +20,9 @@ export function calculateClickedArea(
   )
     return;
 
-  const containerRatio = containerProp.width / containerProp.height;
-  const imageRatio = imgWidth / imgHeight;
-
-  let renderedWidth: number;
-  let renderedHeight: number;
-
-  if (imageRatio > containerRatio) {
-    renderedWidth = containerProp.width;
-    renderedHeight = containerProp.width / imageRatio;
-  } else {
-    renderedHeight = containerProp.height;
-    renderedWidth = containerProp.height * imageRatio;
-  }
-
-  // no scale correction — origin-top-left keeps this offset fixed
+  // base offset from wherever the browser actually placed the image
+  // (object-contain, max-h-[80vh], or anything else — doesn't matter,
+  // offsetWidth/offsetHeight already reflects the real answer)
   const offsetX = (containerProp.width - renderedWidth) / 2;
   const offsetY = (containerProp.height - renderedHeight) / 2;
 
@@ -44,6 +34,7 @@ export function calculateClickedArea(
     y: mouseCordinate.Y - containerProp.top - offsetY + scrollTop,
   };
 
+  // reject clicks that land in the letterbox margin
   if (
     clickedCordinate.x < 0 ||
     clickedCordinate.y < 0 ||

@@ -69,6 +69,8 @@ export default function ImageContainer({
       mouseCordinate,
       imgRef.current.naturalWidth,
       imgRef.current.naturalHeight,
+      imgRef.current.offsetWidth,
+      imgRef.current.offsetHeight,
       currentImgScale,
       containerRef.current.scrollLeft,
       containerRef.current.scrollTop,
@@ -83,22 +85,12 @@ export default function ImageContainer({
     const rect = containerRef.current.getBoundingClientRect();
     const img = imgRef.current;
 
-    // object-contain letterbox math (max-w-full max-h-full constrains the box)
-    const containerRatio = rect.width / rect.height;
-    const imageRatio = img.naturalWidth / img.naturalHeight;
+    // read the actual unscaled layout size directly — correct no matter
+    // which CSS rule ends up binding (max-w, max-h-[80vh], etc.)
+    const renderedWidth = img.offsetWidth;
+    const renderedHeight = img.offsetHeight;
 
-    let renderedWidth, renderedHeight;
-    if (imageRatio > containerRatio) {
-      renderedWidth = rect.width;
-      renderedHeight = rect.width / imageRatio;
-    } else {
-      renderedHeight = rect.height;
-      renderedWidth = rect.height * imageRatio;
-    }
-
-    // base offset from letterboxing — this is where the image's
-    // unscaled top-left corner sits, and origin-top-left means
-    // that corner stays fixed under scaling, so no correction needed
+    // origin-top-left: this corner stays fixed under scaling, no correction needed
     const offsetX = (rect.width - renderedWidth) / 2;
     const offsetY = (rect.height - renderedHeight) / 2;
 
@@ -142,7 +134,7 @@ export default function ImageContainer({
       <img
         ref={imgRef}
         src={gameImage}
-        className={`max-w-full max-h-full tranisiton-transform duration-300 block object-contain origin-top-left`}
+        className={`max-w-full max-h-[80vh] tranisiton-transform duration-300 block object-contain origin-top-left`}
         style={{ transform: `scale(${currentImgScale})` }}
         draggable={false}
       />

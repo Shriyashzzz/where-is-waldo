@@ -102,7 +102,7 @@ export default function ImageContainer({
       onClick={(e) => {
         !isClicked && handleImageClick(e);
       }}
-      className="relative flex justify-center flex-col items-center overflow-hidden cursor-crosshair select-none h-fit md:h-full w-full"
+      className="relative flex overflow-scroll justify-center flex-col items-center overflow-hidden cursor-crosshair select-none h-fit md:h-full w-full"
     >
       {isClicked && (
         <FoundAlert
@@ -114,7 +114,7 @@ export default function ImageContainer({
       <img
         ref={imgRef}
         src={gameImage}
-        className={`max-w-full max-h-full block object-cover overflow-scroll`}
+        className={`max-w-full max-h-full block object-cover `}
         style={{ transform: `scale(${currentImgScale})` }}
         draggable={false}
       />

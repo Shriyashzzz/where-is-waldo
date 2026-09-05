@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Game {
+  id                   Int                   @id @default(autoincrement())
+  level                Level
+  characterCoordinates CharacterCoordinate[]
+  leaderBoards         LeaderBoard[]
+}
+
+model CharacterCoordinate {
+  id        Int       @id @default(autoincrement())
+  character Character
+  gameId    Int
+  game      Game      @relation(fields: [gameId], references: [id])
+  xCord     Float
+  yCord     Float
+
+  @@unique([gameId, character])
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String?       @default("Anonymous")
+  leaderBoards LeaderBoard[]
+}
+
+model LeaderBoard {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  gameId Int
+  game   Game @relation(fields: [gameId], references: [id])
+}
+
+enum Level {
+  Easy
+  Medium
+  Hard
+  God
+}
+
+enum Character {
+  YellowWaldo
+  Cat
+  GirlWaldo
+  StickWaldo
+  GandalfWaldo
+}

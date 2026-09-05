@@ -7,8 +7,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "preserve",
-    "target": "esnext",
+    "module": "esnext",
+    "target": "es2023",
     "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],

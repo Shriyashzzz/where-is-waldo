@@ -2,6 +2,7 @@ import ImageContainer from "../components/GameImage.js";
 import { useRef, useState } from "react";
 import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
 import { Button } from "@radix-ui/themes";
+import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -25,6 +26,7 @@ export function PlayGame() {
 
   return (
     <div className="flex flex-col items-center md:flex-row justify-center md:m-10">
+      <SideCharachterWaldo />
       <section className="h-fit md:h-full w-full bg-inherit flex items-center justify-center">
         <ImageContainer
           containerRef={imgContainer}
@@ -33,11 +35,14 @@ export function PlayGame() {
         />
       </section>
 
-      <div>
-        <Button onClick={handleZoomin}>Zoom in</Button>
-        <Button onClick={handleZoomOut}>Zoom out</Button>
+      <div className="flex flex-col gap-4 m-2 not-md:flex-row">
+        <Button size={"3"} onClick={handleZoomin}>
+          <ZoomInIcon />
+        </Button>
+        <Button size={"3"} onClick={handleZoomOut}>
+          <ZoomOutIcon />
+        </Button>
       </div>
-      <SideCharachterWaldo />
     </div>
   );
 }

@@ -63,33 +63,59 @@ export default function ImageContainer({
       height: containerRef.current?.getBoundingClientRect().height ?? null,
     };
 
-    if (containerCordinate.left === null || containerCordinate.top === null)
-      return;
-    if (!imgRef.current) return;
-
+    if (imgRef.current == null || containerRef.current == null) return;
     const calculatedScaledCoordinate = calculateClickedArea(
       containerCordinate,
       mouseCordinate,
       imgRef.current.naturalWidth,
       imgRef.current.naturalHeight,
+      currentImgScale,
+      containerRef.current.scrollLeft,
+      containerRef.current.scrollTop,
     );
     setScaledCoordiane(calculatedScaledCoordinate);
     setIsClicked(true);
   };
   // handles mouse move on maginifying glass
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (containerRef && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      setLensStyle({
-        left: `${x}px`,
-        top: `${y}px`,
-        backgroundImage: `url(${gameImage})`,
-        backgroundSize: `${rect.width * ZOOM}px ${rect.height * ZOOM}px`,
-        backgroundPosition: `${-(x * ZOOM - LENS_SIZE / 2)}px ${-(y * ZOOM - LENS_SIZE / 2)}px`,
-      });
+    if (!containerRef.current || !imgRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const img = imgRef.current;
+
+    // figure out image's rendered size inside the container (object-contain)
+    const containerRatio = rect.width / rect.height;
+    const imageRatio = img.naturalWidth / img.naturalHeight;
+
+    let renderedWidth, renderedHeight;
+    if (imageRatio > containerRatio) {
+      renderedWidth = rect.width;
+      renderedHeight = rect.width / imageRatio;
+    } else {
+      renderedHeight = rect.height;
+      renderedWidth = rect.height * imageRatio;
     }
+
+    // apply the currentImgScale (transform scales around center)
+    const scaledWidth = renderedWidth * currentImgScale;
+    const scaledHeight = renderedHeight * currentImgScale;
+    const offsetX = (rect.width - scaledWidth) / 2;
+    const offsetY = (rect.height - scaledHeight) / 2;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // position relative to the actual image content
+    const imgX = x - offsetX + containerRef.current.scrollLeft;
+    const imgY = y - offsetY + containerRef.current.scrollTop;
+
+    setLensStyle({
+      left: `${x}px`,
+      top: `${y}px`,
+      backgroundImage: `url(${gameImage})`,
+      backgroundSize: `${scaledWidth * ZOOM}px ${scaledHeight * ZOOM}px`,
+      backgroundPosition: `${-(imgX * ZOOM - LENS_SIZE / 2)}px ${-(imgY * ZOOM - LENS_SIZE / 2)}px`,
+    });
   };
   return (
     <div
@@ -102,7 +128,7 @@ export default function ImageContainer({
       onClick={(e) => {
         !isClicked && handleImageClick(e);
       }}
-      className="relative flex overflow-scroll justify-center flex-col items-center overflow-hidden cursor-crosshair select-none h-fit md:h-full w-full"
+      className="relative flex overflow-scroll justify-center flex-col items-center cursor-crosshair select-none h-fit md:h-full w-full"
     >
       {isClicked && (
         <FoundAlert
@@ -114,13 +140,13 @@ export default function ImageContainer({
       <img
         ref={imgRef}
         src={gameImage}
-        className={`max-w-full max-h-full block object-cover `}
+        className={`max-w-full max-h-full block object-contain `}
         style={{ transform: `scale(${currentImgScale})` }}
         draggable={false}
       />
       <div
         className={`absolute w-32 h-32 rounded-full md:block hidden border-4 border-white/80 shadow-lg
-          pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2
+          pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden
           ${visible && !isClicked ? "block" : "hidden"}`}
         style={lensStyle}
       />

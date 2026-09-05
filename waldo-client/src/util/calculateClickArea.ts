@@ -1,22 +1,22 @@
 import type { ContainerCoordinate, MouseCordinate } from "../types/coordinate";
-
 export function calculateClickedArea(
   containerProp: ContainerCoordinate,
   mouseCordinate: MouseCordinate,
   imgWidth: number,
   imgHeight: number,
+  scale: number, // currentImgScale
+  scrollLeft: number, // containerRef.current.scrollLeft
+  scrollTop: number, // containerRef.current.scrollTop
 ) {
   if (
-    !containerProp.left ||
-    !containerProp.top ||
+    containerProp.left == null ||
+    containerProp.top == null ||
     !mouseCordinate ||
     !containerProp.width ||
     !containerProp.height
   )
     return;
 
-  // Figure out the actual rendered image box inside the container
-  // (accounts for object-contain letterboxing)
   const containerRatio = containerProp.width / containerProp.height;
   const imageRatio = imgWidth / imgHeight;
 
@@ -24,35 +24,41 @@ export function calculateClickedArea(
   let renderedHeight: number;
 
   if (imageRatio > containerRatio) {
-    // image is wider relative to container -> letterboxed top/bottom
     renderedWidth = containerProp.width;
     renderedHeight = containerProp.width / imageRatio;
   } else {
-    // image is taller relative to container -> letterboxed left/right
     renderedHeight = containerProp.height;
     renderedWidth = containerProp.height * imageRatio;
   }
 
-  const offsetX = (containerProp.width - renderedWidth) / 2;
-  const offsetY = (containerProp.height - renderedHeight) / 2;
+  // actual rendered size after CSS transform scale
+  const scaledWidth = renderedWidth * scale;
+  const scaledHeight = renderedHeight * scale;
 
+  // transform-origin is center, so the scaled box expands
+  // outward equally from the unscaled box's center
+  const baseOffsetX = (containerProp.width - renderedWidth) / 2;
+  const baseOffsetY = (containerProp.height - renderedHeight) / 2;
+  const offsetX = baseOffsetX - (scaledWidth - renderedWidth) / 2;
+  const offsetY = baseOffsetY - (scaledHeight - renderedHeight) / 2;
+
+  // position relative to the container's content box, including scroll
   const clickedCordinate = {
-    x: mouseCordinate.X - containerProp.left - offsetX,
-    y: mouseCordinate.Y - containerProp.top - offsetY,
+    x: mouseCordinate.X - containerProp.left - offsetX + scrollLeft,
+    y: mouseCordinate.Y - containerProp.top - offsetY + scrollTop,
   };
 
-  // Optional: reject clicks that land in the letterbox margin
   if (
     clickedCordinate.x < 0 ||
     clickedCordinate.y < 0 ||
-    clickedCordinate.x > renderedWidth ||
-    clickedCordinate.y > renderedHeight
+    clickedCordinate.x > scaledWidth ||
+    clickedCordinate.y > scaledHeight
   ) {
     return;
   }
 
-  const scaleX = imgWidth / renderedWidth;
-  const scaleY = imgHeight / renderedHeight;
+  const scaleX = imgWidth / scaledWidth;
+  const scaleY = imgHeight / scaledHeight;
 
   return {
     originalX: clickedCordinate.x * scaleX,

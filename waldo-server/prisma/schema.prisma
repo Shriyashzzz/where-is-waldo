@@ -37,11 +37,13 @@ model User {
 }
 
 model LeaderBoard {
-  id     Int  @id @default(autoincrement())
+  id     Int   @id @default(autoincrement())
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User  @relation(fields: [userId], references: [id])
   gameId Int
-  game   Game @relation(fields: [gameId], references: [id])
+  level  Level
+  game   Game  @relation(fields: [gameId], references: [id])
+  time   Float
 }
 
 enum Level {

@@ -36,10 +36,10 @@ export function PlayGame() {
       </section>
 
       <div className="flex flex-col gap-4 m-2 not-md:flex-row">
-        <Button size={"3"} onClick={handleZoomin}>
+        <Button color={"tomato"} size={"3"} onClick={handleZoomin}>
           <ZoomInIcon />
         </Button>
-        <Button size={"3"} onClick={handleZoomOut}>
+        <Button color={"tomato"} size={"3"} onClick={handleZoomOut}>
           <ZoomOutIcon />
         </Button>
       </div>

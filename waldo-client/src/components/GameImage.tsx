@@ -140,9 +140,10 @@ export default function ImageContainer({
       />
 
       <div
-        className={`absolute w-32 h-32 rounded-full md:block hidden border-4 border-white/80 shadow-lg
+        className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
             pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden
-            ${visible && !isClicked ? "block" : "hidden"}`}
+            ${visible && !isClicked ? "block" : "hidden"}
+            `}
         style={lensStyle}
       />
     </div>

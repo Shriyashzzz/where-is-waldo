@@ -83,7 +83,7 @@ export default function ImageContainer({
     const rect = containerRef.current.getBoundingClientRect();
     const img = imgRef.current;
 
-    // figure out image's rendered size inside the container (object-contain)
+    // object-contain letterbox math (max-w-full max-h-full constrains the box)
     const containerRatio = rect.width / rect.height;
     const imageRatio = img.naturalWidth / img.naturalHeight;
 
@@ -96,16 +96,18 @@ export default function ImageContainer({
       renderedWidth = rect.height * imageRatio;
     }
 
-    // apply the currentImgScale (transform scales around center)
+    // base offset from letterboxing — this is where the image's
+    // unscaled top-left corner sits, and origin-top-left means
+    // that corner stays fixed under scaling, so no correction needed
+    const offsetX = (rect.width - renderedWidth) / 2;
+    const offsetY = (rect.height - renderedHeight) / 2;
+
     const scaledWidth = renderedWidth * currentImgScale;
     const scaledHeight = renderedHeight * currentImgScale;
-    const offsetX = (rect.width - scaledWidth) / 2;
-    const offsetY = (rect.height - scaledHeight) / 2;
 
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // position relative to the actual image content
     const imgX = x - offsetX + containerRef.current.scrollLeft;
     const imgY = y - offsetY + containerRef.current.scrollTop;
 
@@ -140,14 +142,15 @@ export default function ImageContainer({
       <img
         ref={imgRef}
         src={gameImage}
-        className={`max-w-full max-h-full block object-contain `}
+        className={`max-w-full max-h-full tranisiton-transform duration-300 block object-contain origin-top-left`}
         style={{ transform: `scale(${currentImgScale})` }}
         draggable={false}
       />
+
       <div
         className={`absolute w-32 h-32 rounded-full md:block hidden border-4 border-white/80 shadow-lg
-          pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden
-          ${visible && !isClicked ? "block" : "hidden"}`}
+            pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden
+            ${visible && !isClicked ? "block" : "hidden"}`}
         style={lensStyle}
       />
     </div>

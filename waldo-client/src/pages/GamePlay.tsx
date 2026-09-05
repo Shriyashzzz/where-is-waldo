@@ -27,7 +27,7 @@ export function PlayGame() {
   return (
     <div className="flex flex-col items-center md:flex-row justify-center md:m-10">
       <SideCharachterWaldo />
-      <section className="h-fit md:h-full w-full bg-inherit flex items-center justify-center">
+      <section className="h-fit w-full bg-inherit flex items-center justify-center">
         <ImageContainer
           containerRef={imgContainer}
           imgRef={imgRef}

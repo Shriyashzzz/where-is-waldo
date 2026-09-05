@@ -1,12 +1,13 @@
 import type { ContainerCoordinate, MouseCordinate } from "../types/coordinate";
+
 export function calculateClickedArea(
   containerProp: ContainerCoordinate,
   mouseCordinate: MouseCordinate,
   imgWidth: number,
   imgHeight: number,
-  scale: number, // currentImgScale
-  scrollLeft: number, // containerRef.current.scrollLeft
-  scrollTop: number, // containerRef.current.scrollTop
+  scale: number,
+  scrollLeft: number,
+  scrollTop: number,
 ) {
   if (
     containerProp.left == null ||
@@ -31,18 +32,13 @@ export function calculateClickedArea(
     renderedWidth = containerProp.height * imageRatio;
   }
 
-  // actual rendered size after CSS transform scale
+  // no scale correction — origin-top-left keeps this offset fixed
+  const offsetX = (containerProp.width - renderedWidth) / 2;
+  const offsetY = (containerProp.height - renderedHeight) / 2;
+
   const scaledWidth = renderedWidth * scale;
   const scaledHeight = renderedHeight * scale;
 
-  // transform-origin is center, so the scaled box expands
-  // outward equally from the unscaled box's center
-  const baseOffsetX = (containerProp.width - renderedWidth) / 2;
-  const baseOffsetY = (containerProp.height - renderedHeight) / 2;
-  const offsetX = baseOffsetX - (scaledWidth - renderedWidth) / 2;
-  const offsetY = baseOffsetY - (scaledHeight - renderedHeight) / 2;
-
-  // position relative to the container's content box, including scroll
   const clickedCordinate = {
     x: mouseCordinate.X - containerProp.left - offsetX + scrollLeft,
     y: mouseCordinate.Y - containerProp.top - offsetY + scrollTop,

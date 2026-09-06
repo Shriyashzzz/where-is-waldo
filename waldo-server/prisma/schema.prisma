@@ -14,7 +14,7 @@ datasource db {
 
 model Game {
   id                   Int                   @id @default(autoincrement())
-  level                Level
+  level                Level                 @unique
   characterCoordinates CharacterCoordinate[]
   leaderBoards         LeaderBoard[]
 }

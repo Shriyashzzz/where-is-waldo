@@ -36,7 +36,7 @@ export function HomePage() {
                   size={"2"}
                   color="red"
                   onClick={() =>
-                    navigate(`play/${index + 1}`, { viewTransition: true })
+                    navigate(`play/${index}`, { viewTransition: true })
                   }
                 >
                   {" "}

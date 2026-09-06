@@ -15,12 +15,14 @@ interface Prop {
   containerRef: React.RefObject<HTMLDivElement | null>;
   imgRef: React.RefObject<HTMLImageElement | null>;
   currentImgScale: number;
+  gameIndex: number;
 }
 
 export default function ImageContainer({
   containerRef,
   imgRef,
   currentImgScale,
+  gameIndex,
 }: Prop) {
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
@@ -30,19 +32,19 @@ export default function ImageContainer({
   const [scaledCoordinate, setScaledCoordiane] = useState<
     OriginalCordinate | undefined
   >({ originalX: 0, originalY: 0 });
-  const { gameNumber } = useParams<string>();
+
   useEffect(() => {
-    switch (gameNumber) {
-      case "1":
+    switch (gameIndex) {
+      case 0:
         setGameImg(waldoEasy);
         return;
-      case "2":
+      case 1:
         setGameImg(waldoMedium);
         return;
-      case "3":
+      case 2:
         setGameImg(waldoHard);
         return;
-      case "4":
+      case 3:
         setGameImg(waldoGodMode);
         return;
     }
@@ -129,6 +131,7 @@ export default function ImageContainer({
           isClicked={isClicked}
           setIsOpen={setIsClicked}
           scaledCoordinate={scaledCoordinate}
+          gameIndex={gameIndex}
         />
       )}
       <img

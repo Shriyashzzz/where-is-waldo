@@ -11,17 +11,38 @@ interface Avatar {
 }
 
 export interface CharacterStore {
-  avatars: Array<Avatar>;
-  updateAvatar: (newAvatar: Avatar[]) => void;
+  avatars: Array<Array<Avatar>>;
+  updateAvatar: (newAvatar: Avatar[], index: number) => void;
 }
 
 export const useCharacter = create<CharacterStore>()((set) => ({
   avatars: [
-    { img: WaldoAvatar1, found: false },
-    { img: WaldoAvatar2, found: false },
-    { img: WaldoAvatar3, found: false },
-    { img: WaldoAvatar4, found: false },
-    { img: WaldoAvatar5, found: false },
+    [
+      { img: WaldoAvatar1, found: false },
+      { img: WaldoAvatar2, found: false },
+      { img: WaldoAvatar3, found: false },
+      { img: WaldoAvatar4, found: false },
+      { img: WaldoAvatar5, found: false },
+    ],
+    [
+      { img: WaldoAvatar1, found: false },
+      { img: WaldoAvatar2, found: false },
+      { img: WaldoAvatar3, found: false },
+      { img: WaldoAvatar4, found: false },
+      { img: WaldoAvatar5, found: false },
+    ],
+    [
+      { img: WaldoAvatar1, found: false },
+      { img: WaldoAvatar2, found: false },
+      { img: WaldoAvatar3, found: false },
+      { img: WaldoAvatar4, found: false },
+      { img: WaldoAvatar5, found: false },
+    ],
   ],
-  updateAvatar: (newAvatars) => set({ avatars: newAvatars }),
+  updateAvatar: (newAvatars, index) =>
+    set((state) => {
+      const updated = [...state.avatars];
+      updated[index] = newAvatars;
+      return { avatars: updated };
+    }),
 }));

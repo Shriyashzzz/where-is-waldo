@@ -15,7 +15,7 @@ export function CharachterAvatar({ avatarObj, name }: Props) {
     <Avatar.Root className="inline-flex size-11.25 select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle bg-white p-1">
       <Avatar.Image
         className={`size-full rounded-[inherit] object-contain cursor-pointer ${avatarObj && avatarObj.found && "pointer-events-none grayscale opacity-50"}`}
-        src={avatarObj ? avatarObj.img : ""}
+        src={avatarObj && avatarObj.img}
         alt={name}
       />
       <Avatar.Fallback

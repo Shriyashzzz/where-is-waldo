@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
 import { Button } from "@radix-ui/themes";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
+import { useParams } from "react-router";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -13,6 +14,9 @@ export function PlayGame() {
   const imgContainer = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const [currentImgScale, setCurrentImageScale] = useState<number>(1);
+  const { gameNumber } = useParams<string>();
+  const gameIndex: number = Number(gameNumber); // corresponds to zustand store avatars state info index position for each game
+
   const handleZoomin = () => {
     setCurrentImageScale((s) => s * 2);
   };
@@ -26,12 +30,13 @@ export function PlayGame() {
 
   return (
     <div className="flex flex-col items-center md:flex-row justify-center md:m-10">
-      <SideCharachterWaldo />
+      <SideCharachterWaldo gameIndex={gameIndex} />
       <section className="h-fit w-full bg-inherit flex items-center justify-center">
         <ImageContainer
           containerRef={imgContainer}
           imgRef={imgRef}
           currentImgScale={currentImgScale}
+          gameIndex={gameIndex}
         />
       </section>
 

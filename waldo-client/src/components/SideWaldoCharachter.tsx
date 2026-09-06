@@ -1,8 +1,12 @@
 import { useCharacter } from "../hooks/store";
 import { CharachterAvatar } from "./CharachterAvatar";
 
-export function SideCharachterWaldo() {
-  const avatars = useCharacter((s) => s.avatars);
+interface Props {
+  gameIndex: number;
+}
+
+export function SideCharachterWaldo({ gameIndex }: Props) {
+  const avatars = useCharacter((s) => s.avatars[gameIndex]);
 
   return (
     <section className="flex flex-row md:flex-col p-2 gap-3">

@@ -7,11 +7,18 @@ interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
   isClicked: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  gameIndex: number;
 }
 
-export function FoundAlert({ scaledCoordinate, isClicked, setIsOpen }: Props) {
-  const avatars = useCharacter((s) => s.avatars); //zustand store
+export function FoundAlert({
+  scaledCoordinate,
+  isClicked,
+  setIsOpen,
+  gameIndex,
+}: Props) {
+  const avatars = useCharacter((s) => s.avatars[gameIndex]); //zustand store
   const setAvatar = useCharacter((s) => s.updateAvatar);
+
   const handleCharachterClick = (index: number) => {
     if (avatars[index]?.found) return;
     console.log(scaledCoordinate); // send this scaled cordinate to server for checks together with the charachter selected
@@ -20,7 +27,7 @@ export function FoundAlert({ scaledCoordinate, isClicked, setIsOpen }: Props) {
     //imagining the charchter clicked is teh correct charachter
     const tempAvatar = [...avatars];
     tempAvatar[index].found = true;
-    setAvatar(tempAvatar);
+    setAvatar(tempAvatar, gameIndex);
     //ensure to show loading when fetching disable when true, maybe use redux state management for counter
   };
   return (

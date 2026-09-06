@@ -104,8 +104,8 @@ export default function ImageContainer({
     const imgY = y - offsetY + containerRef.current.scrollTop;
 
     setLensStyle({
-      left: `${x}px`,
-      top: `${y}px`,
+      left: `${imgX}px`,
+      top: `${imgY}px`,
       backgroundImage: `url(${gameImage})`,
       backgroundSize: `${scaledWidth * ZOOM}px ${scaledHeight * ZOOM}px`,
       backgroundPosition: `${-(imgX * ZOOM - LENS_SIZE / 2)}px ${-(imgY * ZOOM - LENS_SIZE / 2)}px`,

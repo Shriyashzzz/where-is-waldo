@@ -23,7 +23,7 @@ model CharacterCoordinate {
   id        Int       @id @default(autoincrement())
   character Character
   gameId    Int
-  game      Game      @relation(fields: [gameId], references: [id])
+  game      Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   xCord     Float
   yCord     Float
 
@@ -39,10 +39,10 @@ model User {
 model LeaderBoard {
   id     Int   @id @default(autoincrement())
   userId Int
-  user   User  @relation(fields: [userId], references: [id])
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   gameId Int
   level  Level
-  game   Game  @relation(fields: [gameId], references: [id])
+  game   Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
   time   Float
 }
 
@@ -55,8 +55,8 @@ enum Level {
 
 enum Character {
   YellowWaldo
-  Cat
+  Dog
   GirlWaldo
-  StickWaldo
+  Waldo
   GandalfWaldo
 }

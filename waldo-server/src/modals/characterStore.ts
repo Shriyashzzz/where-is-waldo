@@ -1,16 +1,16 @@
-type CharacterName =
+type CharactersName =
   | "YellowWaldo"
   | "Dog"
   | "GirlWaldo"
   | "Waldo"
   | "GandalfWaldo";
 
-interface CharacterState {
-  avatars: Array<Record<CharacterName, boolean>>;
-  found: (index: number, key: CharacterName) => void;
+interface CharactersState {
+  avatars: Array<Record<CharactersName, boolean>>;
+  found: (index: number, key: CharactersName) => void;
 }
 
-export const characterState: CharacterState = {
+export const charactersStore: CharactersState = {
   avatars: [
     {
       YellowWaldo: false,
@@ -41,8 +41,8 @@ export const characterState: CharacterState = {
       GandalfWaldo: false,
     },
   ],
-  found: (index: number, key: CharacterName) => {
-    const avatar = characterState.avatars[index];
+  found: (index: number, key: CharactersName) => {
+    const avatar = charactersStore.avatars[index];
     if (!avatar) throw new Error(`Invalid Index value, passed index: ${index}`);
     avatar[key] = true;
   },

@@ -4,9 +4,19 @@ import queries from "../modals/query";
 import { getLevelFromIndex } from "../util/getLevelFromIndex";
 import { Character } from "../../generated/prisma/enums";
 import { isWithInBounds } from "../util/isWithinBounds";
+import { charactersStore } from "../modals/characterStore";
+import { AppError } from "../errors/AppError";
 
 const validationChain = [
-  param("gameIndex").notEmpty().isNumeric(),
+  param("gameIndex")
+    .notEmpty()
+    .isNumeric()
+    .custom((indx) => {
+      if (charactersStore.getLength() < indx || indx < 0) {
+        throw new Error("invalid gameIndex value");
+      }
+      return true;
+    }),
   body("character")
     .notEmpty()
     .custom((val) => {
@@ -46,7 +56,7 @@ const checkIfValidCoordinate = [
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(errors);
+      return next(new AppError("Ivalid user DataType", 400, false, true));
     }
     const { gameIndex, character, xCord, yCord }: Props = matchedData(req);
     const currLevel = getLevelFromIndex(gameIndex);
@@ -56,7 +66,15 @@ const checkIfValidCoordinate = [
       character,
     );
     if (!X_Cord || !Y_Cord) return res.sendStatus(400); // undefined clicked coordinate
-    if (!ok) return next(new Error("Server Error"));
+    if (!ok)
+      return next(
+        new AppError(
+          "Unable process the coordinates with the database",
+          500,
+          false,
+          false,
+        ),
+      );
     const clickedCoordinate = { x_cord: xCord, y_cord: yCord };
     const originalCoordinate = { x_cord: X_Cord, y_cord: Y_Cord };
     const isWithinBounds = isWithInBounds(
@@ -64,16 +82,20 @@ const checkIfValidCoordinate = [
       clickedCoordinate,
     );
 
-    if (isWithinBounds)
-      //update server character's state depending on the answer
-      return res.status(200).json({
-        isCharachter: true, // send true if correct click
-        clickedX: X_Cord,
-        clickedY: Y_Cord,
-        foundCharacter: character,
-        allFound: false, // create a function to check if all found
-      });
-
+    if (isWithinBounds) {
+      try {
+        charactersStore.found(gameIndex, character);
+        return res.status(200).json({
+          isCharachter: true, // send true if correct click
+          clickedX: X_Cord,
+          clickedY: Y_Cord,
+          foundCharacter: character,
+          allFound: false, // create a function to check if all found
+        });
+      } catch (e) {
+        next(e);
+      }
+    }
     return res.status(200).json({
       isCharacter: false,
       clickedX: X_Cord,

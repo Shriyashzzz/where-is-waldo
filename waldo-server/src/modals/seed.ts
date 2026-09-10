@@ -72,7 +72,6 @@ async function main(): Promise<void> {
       yCord: 974,
     },
   });
-  s;
   const yellowWaldo = await prisma.characterCoordinate.create({
     data: {
       character: Character.YellowWaldo,

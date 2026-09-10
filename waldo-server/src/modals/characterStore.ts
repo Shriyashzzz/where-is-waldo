@@ -8,6 +8,7 @@ type CharactersName =
 interface CharactersState {
   avatars: Array<Record<CharactersName, boolean>>;
   found: (index: number, key: CharactersName) => void;
+  getLength: () => number;
 }
 
 export const charactersStore: CharactersState = {
@@ -43,7 +44,13 @@ export const charactersStore: CharactersState = {
   ],
   found: (index: number, key: CharactersName) => {
     const avatar = charactersStore.avatars[index];
-    if (!avatar) throw new Error(`Invalid Index value, passed index: ${index}`);
+    if (!avatar)
+      throw new Error(
+        `Invalid Index value, passed by the controller/checkIfValidCoordinate module, givenIndexValue ${index}`,
+      );
     avatar[key] = true;
+  },
+  getLength: () => {
+    return charactersStore.avatars.length;
   },
 };

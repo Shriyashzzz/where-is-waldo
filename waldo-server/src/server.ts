@@ -1,15 +1,12 @@
 import express from "express";
 import config from "./config/config";
-import type { Errback, NextFunction, Request, Response } from "express";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 
 app.use("/game/:leaderboard");
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.status(500);
-  console.log(err);
-});
+app.use(errorHandler);
 
 app.listen(config.port, () => {
   console.log(`server is live on: https://localhost:${config.port}`);

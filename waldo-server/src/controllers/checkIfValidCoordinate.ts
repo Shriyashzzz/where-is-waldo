@@ -90,7 +90,7 @@ const checkIfValidCoordinate = [
           clickedX: X_Cord,
           clickedY: Y_Cord,
           foundCharacter: character,
-          allFound: false, // create a function to check if all found
+          allFound: charactersStore.isAllFound(gameIndex),
         });
       } catch (e) {
         next(e);
@@ -101,7 +101,7 @@ const checkIfValidCoordinate = [
       clickedX: X_Cord,
       clickedY: Y_Cord,
       clickedCharacter: character,
-      allFound: false,
+      allFound: charactersStore.isAllFound(gameIndex),
     });
   },
 ];

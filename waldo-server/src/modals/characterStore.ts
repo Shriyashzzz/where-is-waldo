@@ -9,6 +9,7 @@ interface CharactersState {
   avatars: Array<Record<CharactersName, boolean>>;
   found: (index: number, key: CharactersName) => void;
   getLength: () => number;
+  isAllFound: (gameIndex: number) => boolean;
 }
 
 export const charactersStore: CharactersState = {
@@ -52,5 +53,15 @@ export const charactersStore: CharactersState = {
   },
   getLength: () => {
     return charactersStore.avatars.length;
+  },
+
+  isAllFound: (gameIndex: number) => {
+    const avatar = charactersStore.avatars[gameIndex];
+    if (!avatar)
+      throw new Error(
+        `Invalid Index value, passed by the controller/checkIfValidCoordinate module, givenIndexValue ${gameIndex}`,
+      );
+    const allFound: boolean = Object.values(avatar).every(Boolean);
+    return allFound;
   },
 };

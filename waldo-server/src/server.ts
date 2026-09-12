@@ -1,13 +1,9 @@
 import express from "express";
 import config from "./config/config";
 import { errorHandler } from "./middlewares/errorHandler";
+import { indexRouter } from "./routes";
 
-const app = express();
-
-app.use("/game/:leaderboard");
-
+export const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use("/api", indexRouter);
 app.use(errorHandler);
-
-app.listen(config.port, () => {
-  console.log(`server is live on: https://localhost:${config.port}`);
-});

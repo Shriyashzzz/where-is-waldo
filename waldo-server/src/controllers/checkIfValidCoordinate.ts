@@ -8,9 +8,9 @@ import { charactersStore } from "../modals/characterStore";
 import { AppError } from "../errors/AppError";
 
 const validationChain = [
-  param("gameIndex")
+  param("index")
+    .trim()
     .notEmpty()
-    .isNumeric()
     .custom((indx) => {
       if (charactersStore.getLength() < indx || indx < 0) {
         throw new Error("invalid gameIndex value");
@@ -18,6 +18,7 @@ const validationChain = [
       return true;
     }),
   body("character")
+    .trim()
     .notEmpty()
     .custom((val) => {
       switch (val) {
@@ -28,24 +29,26 @@ const validationChain = [
         case "GirlWaldo":
           return Character.GirlWaldo;
         case "Waldo":
-          Character.Waldo;
+          return Character.Waldo;
         case "GandalfWaldo":
-          Character.GandalfWaldo;
+          return Character.GandalfWaldo;
       }
       throw new Error("Invalid Character Name");
     }),
   body("xCord")
+    .trim()
     .notEmpty()
     .isFloat()
     .withMessage("Invalid x coordinate datatype"),
   body("yCord")
+    .trim()
     .notEmpty()
     .isFloat()
     .withMessage("Invalid y coordinate datatype"),
 ];
 
 interface Props {
-  gameIndex: number;
+  index: string;
   character: Character;
   xCord: number;
   yCord: number;
@@ -58,13 +61,17 @@ const checkIfValidCoordinate = [
     if (!errors.isEmpty()) {
       return next(new AppError("Ivalid user DataType", 400, false, true));
     }
-    const { gameIndex, character, xCord, yCord }: Props = matchedData(req);
+
+    const { index, character, xCord, yCord }: Props = matchedData(req);
+    let gameIndex = parseInt(index);
     const currLevel = getLevelFromIndex(gameIndex);
     // get the specific character's original coordinate
+
     const { ok, X_Cord, Y_Cord } = await queries.getTrueCoordinate(
       currLevel!,
       character,
     );
+    console.log(ok);
     if (!X_Cord || !Y_Cord) return res.sendStatus(400); // undefined clicked coordinate
     if (!ok)
       return next(

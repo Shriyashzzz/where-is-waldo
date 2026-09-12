@@ -2,6 +2,7 @@ import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import type { OriginalCordinate } from "../pages/GamePlay";
 import { CharachterAvatar } from "./CharachterAvatar";
 import { useCharacter } from "../hooks/store";
+import { useFetch } from "../hooks/useFetch";
 
 interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
@@ -19,11 +20,24 @@ export function FoundAlert({
   const avatars = useCharacter((s) => s.avatars[gameIndex]); //zustand store
   const setAvatar = useCharacter((s) => s.updateAvatar);
 
-  const handleCharachterClick = (index: number) => {
+  const handleCharachterClick = async (index: number) => {
     if (avatars[index]?.found) return;
     console.log(scaledCoordinate); // send this scaled cordinate to server for checks together with the charachter selected
     console.log(index);
-    //get the response from the server
+    // const body = {character:  }
+    // const { data, loading, error } = await useFetch(
+    //   `api/games/${gameIndex}/click`,
+    //   {
+    //     method: "POST",
+    //     credentials: "include",
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "application/json",
+
+    //     },
+    //     body :
+    //   },
+    // );
     //imagining the charchter clicked is teh correct charachter
     const tempAvatar = [...avatars];
     tempAvatar[index].found = true;

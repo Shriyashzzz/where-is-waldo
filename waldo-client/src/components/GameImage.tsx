@@ -7,7 +7,6 @@ import waldoEasy from "../../src/assets/images/game/levels/easy.jpg";
 import waldoMedium from "../../src/assets/images/game/levels/medium.jpg";
 import waldoHard from "../../src/assets/images/game/levels/hard.jpg";
 import waldoGodMode from "../../src/assets/images/game/levels/godMode.jpg";
-import { useParams } from "react-router";
 
 const ZOOM = 2; // make this an state later
 

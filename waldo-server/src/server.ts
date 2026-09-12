@@ -1,5 +1,6 @@
 import { app } from "./routes/app.js";
+import config from "./config/config.js";
 
-app.listen(8080, () => {
-  console.log("live at: https://localhost:8080");
+app.listen(config.port, () => {
+  console.log(`Live: https://localhost:${config.port}`);
 });

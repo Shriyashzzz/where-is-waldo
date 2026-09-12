@@ -61,7 +61,6 @@ const checkIfValidCoordinate = [
     if (!errors.isEmpty()) {
       return next(new AppError("Ivalid user DataType", 400, false, true));
     }
-
     const { index, character, xCord, yCord }: Props = matchedData(req);
     let gameIndex = parseInt(index);
     const currLevel = getLevelFromIndex(gameIndex);
@@ -71,7 +70,6 @@ const checkIfValidCoordinate = [
       currLevel!,
       character,
     );
-    console.log(ok);
     if (!X_Cord || !Y_Cord) return res.sendStatus(400); // undefined clicked coordinate
     if (!ok)
       return next(
@@ -88,26 +86,20 @@ const checkIfValidCoordinate = [
       originalCoordinate,
       clickedCoordinate,
     );
-
+    let isCorrect = false;
     if (isWithinBounds) {
       try {
         charactersStore.found(gameIndex, character);
-        return res.status(200).json({
-          isCharachter: true, // send true if correct click
-          clickedX: X_Cord,
-          clickedY: Y_Cord,
-          foundCharacter: character,
-          allFound: charactersStore.isAllFound(gameIndex),
-        });
+        isCorrect = true;
       } catch (e) {
         next(e);
       }
     }
     return res.status(200).json({
-      isCharacter: false,
-      clickedX: X_Cord,
-      clickedY: Y_Cord,
-      clickedCharacter: character,
+      isCorrectCharacter: isCorrect,
+      clickedX: xCord,
+      clickedY: yCord,
+      foundCharacter: character,
       allFound: charactersStore.isAllFound(gameIndex),
     });
   },

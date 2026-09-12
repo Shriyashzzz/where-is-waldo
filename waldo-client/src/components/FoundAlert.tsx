@@ -1,15 +1,19 @@
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
-import { useState } from "react";
+import { useState, type SetStateAction } from "react";
 import type { OriginalCordinate } from "../pages/GamePlay";
 import { CharachterAvatar } from "./CharachterAvatar";
 import { useCharacter, type CharactersName } from "../hooks/store";
 import { useNavigate } from "react-router";
+import type { FoundCharahters } from "./GameImage";
+import type { Coords } from "./GameImage";
 
 interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
   isClicked: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   gameIndex: number;
+  setFoundCharachters: React.Dispatch<SetStateAction<FoundCharahters>>;
+  currentClickedCoordinate: Coords;
 }
 
 interface Data {
@@ -25,6 +29,8 @@ export function FoundAlert({
   isClicked,
   setIsOpen,
   gameIndex,
+  setFoundCharachters,
+  currentClickedCoordinate,
 }: Props) {
   const avatars = useCharacter((s) => s.avatars[gameIndex]);
   const setAvatar = useCharacter((s) => s.updateAvatar);
@@ -61,6 +67,15 @@ export function FoundAlert({
         const tempAvatar = [...avatars];
         tempAvatar[index].found = true;
         setAvatar(tempAvatar, gameIndex);
+        setFoundCharachters((c) => {
+          const tempArr = [...c];
+          tempArr.push({
+            xCord: currentClickedCoordinate.xCord,
+            yCord: currentClickedCoordinate.yCord,
+          });
+          return tempArr;
+        });
+        setTimeout(() => setIsOpen(false), 300);
       }
     } catch (err) {
       console.log(err);

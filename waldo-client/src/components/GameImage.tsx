@@ -7,6 +7,7 @@ import waldoEasy from "../../src/assets/images/game/levels/easy.jpg";
 import waldoMedium from "../../src/assets/images/game/levels/medium.jpg";
 import waldoHard from "../../src/assets/images/game/levels/hard.jpg";
 import waldoGodMode from "../../src/assets/images/game/levels/godMode.jpg";
+import { Check } from "lucide-react";
 
 const ZOOM = 2; // make this an state later
 
@@ -16,6 +17,9 @@ interface Prop {
   currentImgScale: number;
   gameIndex: number;
 }
+
+export type Coords = { xCord: number; yCord: number };
+export type FoundCharahters = Array<Coords>;
 
 export default function ImageContainer({
   containerRef,
@@ -31,7 +35,11 @@ export default function ImageContainer({
   const [scaledCoordinate, setScaledCoordiane] = useState<
     OriginalCordinate | undefined
   >({ originalX: 0, originalY: 0 });
-
+  const [originalCoordinate, setOriginalCoordinate] = useState<Coords>({
+    xCord: 0,
+    yCord: 0,
+  });
+  const [foundCharachters, setFoundCharachters] = useState<FoundCharahters>([]);
   useEffect(() => {
     switch (gameIndex) {
       case 0:
@@ -76,7 +84,12 @@ export default function ImageContainer({
       containerRef.current.scrollLeft,
       containerRef.current.scrollTop,
     );
+    if (!calculatedScaledCoordinate) return;
     setScaledCoordiane(calculatedScaledCoordinate);
+    setOriginalCoordinate({
+      xCord: calculatedScaledCoordinate.originalX,
+      yCord: calculatedScaledCoordinate.originalY,
+    });
     setIsClicked(true);
   };
   // handles mouse move on maginifying glass
@@ -131,23 +144,45 @@ export default function ImageContainer({
           setIsOpen={setIsClicked}
           scaledCoordinate={scaledCoordinate}
           gameIndex={gameIndex}
+          setFoundCharachters={setFoundCharachters}
+          currentClickedCoordinate={originalCoordinate}
         />
       )}
-      <img
-        ref={imgRef}
-        src={gameImage}
-        className={`max-w-full max-h-[80vh] tranisiton-transform duration-300 block object-contain origin-top-left`}
-        style={{ transform: `scale(${currentImgScale})` }}
-        draggable={false}
-      />
 
       <div
-        className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
+        className="relative inline-block origin-top-left"
+        style={{ transform: `scale(${currentImgScale})` }}
+      >
+        <img
+          ref={imgRef}
+          src={gameImage}
+          className="relative max-w-full max-h-[80vh] block object-contain origin-top-left"
+          draggable={false}
+        />
+        <div
+          className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
             pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden
             ${visible && !isClicked ? "block" : "hidden"}
             `}
-        style={lensStyle}
-      />
+          style={lensStyle}
+        />
+
+        {foundCharachters.map((arr) => {
+          if (!imgRef.current) return null;
+          const leftPct = (arr.xCord / imgRef.current.naturalWidth) * 100;
+          const topPct = (arr.yCord / imgRef.current.naturalHeight) * 100;
+
+          return (
+            <div
+              key={`${arr.xCord}-${arr.yCord}`}
+              style={{ left: `${leftPct}%`, top: `${topPct}%` }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center size-6  highlight highlight-variant-3 highlight-sky-600  pointer-events-none"
+            >
+              <Check className="size-4 text-white" strokeWidth={4} />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

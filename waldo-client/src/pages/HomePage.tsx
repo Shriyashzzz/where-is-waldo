@@ -18,7 +18,7 @@ export function HomePage() {
     <section className="w-full flex flex-col font-yuyu items-center p-10 gap-4">
       <h1 className="font-bold text-3xl md:text-6xl text-center mb-10  ">
         Are you ready to{" "}
-        <span className=" highlight highlight-variant-12 after:bg-gradient-to-tr after:from-amber-500 after:to-sky-500">
+        <span className=" highlight highlight-variant-12 after:bg-linear-to-tr after:from-amber-500 after:to-sky-500">
           find
         </span>{" "}
         all the waldo's?
@@ -30,7 +30,7 @@ export function HomePage() {
               className="flex text-white flex-col w-full justify-center items-center gap-2"
               key={index}
             >
-              <p className="text-3xl font-bold highlight highlight-variant-18 after:bg-gradient-to-tr after:from-sky-500 after:to-red-500 ">
+              <p className="text-3xl font-bold highlight highlight-variant-4 after:bg-linear-to-tr highlight-spread-md after:from-sky-500 after:to-red-500 ">
                 {levels[index]}
               </p>
               <img

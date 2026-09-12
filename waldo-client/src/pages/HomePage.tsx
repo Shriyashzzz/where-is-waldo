@@ -16,7 +16,7 @@ export function HomePage() {
   const levels: Array<String> = ["Easy", "Medium", "Hard", "God Mode"];
   return (
     <section className="w-full flex flex-col font-yuyu items-center p-10 gap-4">
-      <h1 className="font-bold text-3xl md:text-6xl text-center mb-10  ">
+      <h1 className="font-bold text-4xl md:text-6xl text-center mb-10  ">
         Are you ready to{" "}
         <span className=" highlight highlight-variant-12 after:bg-linear-to-tr after:from-amber-500 after:to-sky-500">
           find

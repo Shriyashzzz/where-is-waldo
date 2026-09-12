@@ -9,7 +9,7 @@
   font-style: normal;
   font-display: swap;
 }
-
+@plugin "tailwindcss-highlights";
 @theme {
   --font-yuyu: "Yuyu", sans-serif;
 }

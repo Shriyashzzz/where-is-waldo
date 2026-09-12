@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 export function Header() {
   const navigate = useNavigate();
   return (
-    <header className="h-25 w-full bg-[#4F6D7A] text-white flex justify-center items-center m">
+    <header className="h-25 w-full bg-[#4F6D7A] text-white flex justify-center items-center ">
       <div
         className="flex justify-center items-center h-full w-fit"
         onClick={() => navigate("/", { viewTransition: true })}

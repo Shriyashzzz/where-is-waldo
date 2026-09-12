@@ -1,9 +1,5 @@
-import express from "express";
-import config from "./config/config";
-import { errorHandler } from "./middlewares/errorHandler";
-import { indexRouter } from "./routes";
+import { app } from "./routes/app.js";
 
-export const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use("/api", indexRouter);
-app.use(errorHandler);
+app.listen(8080, () => {
+  console.log("live at: https://localhost:8080");
+});

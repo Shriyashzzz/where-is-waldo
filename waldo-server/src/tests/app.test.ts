@@ -1,8 +1,11 @@
-import { coordinateRouter } from "../routes/charachterCoordinate";
 import request from "supertest";
-import { app } from "../server";
+import { app } from "../routes/app";
+import { prisma } from "../config/prisma";
 
 describe("CharacterCoordinateRoute", () => {
+  afterAll(() => {
+    prisma.$disconnect();
+  });
   test("easy waldo character exact correct coordinate", (done) => {
     request(app)
       .post("/api/games/0/click")

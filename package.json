@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"cd waldo-client && npm run dev\" \"cd waldo-server && npm run dev\""
   },
   "keywords": [],
   "author": "",

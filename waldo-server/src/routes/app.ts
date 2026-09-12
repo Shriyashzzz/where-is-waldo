@@ -4,6 +4,6 @@ import { errorHandler } from "../middlewares/errorHandler";
 
 export const app = express();
 app.use(express.urlencoded({ extended: true }));
-
+app.set("trust proxy", true);
 app.use("/api/games", gameRouter);
 app.use("/", errorHandler);

@@ -13,9 +13,10 @@ export function HomePage() {
     waldoHard,
     waldoGodMode,
   ];
+  const levels: Array<String> = ["Easy", "Medium", "Hard", "God Mode"];
   return (
     <section className="w-full flex flex-col font-yuyu items-center p-10 gap-4">
-      <h1 className="font-bold text-6xl text-center ">
+      <h1 className="font-bold text-6xl text-center mb-10 ">
         Are you ready to find all the waldo's?
       </h1>
       <section className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full gap-5  ">
@@ -25,11 +26,13 @@ export function HomePage() {
               className="flex flex-col w-full justify-center items-center gap-2"
               key={index}
             >
+              <p className="text-3xl font-bold">{levels[index]}</p>
               <img
                 src={img}
                 alt="game image preview"
                 className="w-full h-full object-cover border-2 border-amber-600"
               />
+
               <div className="flex  justify-center items-center min-w-0 gap-2">
                 <Button
                   style={{ cursor: "pointer" }}

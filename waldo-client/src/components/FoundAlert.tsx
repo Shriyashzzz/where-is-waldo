@@ -1,8 +1,9 @@
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
+import { useState } from "react";
 import type { OriginalCordinate } from "../pages/GamePlay";
 import { CharachterAvatar } from "./CharachterAvatar";
-import { useCharacter } from "../hooks/store";
-import { useFetch } from "../hooks/useFetch";
+import { useCharacter, type CharactersName } from "../hooks/store";
+import { useNavigate } from "react-router";
 
 interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
@@ -11,51 +12,82 @@ interface Props {
   gameIndex: number;
 }
 
+interface Data {
+  isCorrectCharacter: boolean;
+  clickedX: number;
+  clickedY: number;
+  foundCharacter: CharactersName;
+  allFound: boolean;
+}
+
 export function FoundAlert({
   scaledCoordinate,
   isClicked,
   setIsOpen,
   gameIndex,
 }: Props) {
-  const avatars = useCharacter((s) => s.avatars[gameIndex]); //zustand store
+  const avatars = useCharacter((s) => s.avatars[gameIndex]);
   const setAvatar = useCharacter((s) => s.updateAvatar);
+  const navigate = useNavigate();
+  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
 
-  const handleCharachterClick = async (index: number) => {
-    if (avatars[index]?.found) return;
-    console.log(scaledCoordinate); // send this scaled cordinate to server for checks together with the charachter selected
-    console.log(index);
-    // const body = {character:  }
-    // const { data, loading, error } = await useFetch(
-    //   `api/games/${gameIndex}/click`,
-    //   {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
+  const handleCharachterClick = async (
+    index: number,
+    avatarName: CharactersName,
+  ) => {
+    if (avatars[index]?.found || pendingIndex !== null) return;
 
-    //     },
-    //     body :
-    //   },
-    // );
-    //imagining the charchter clicked is teh correct charachter
-    const tempAvatar = [...avatars];
-    tempAvatar[index].found = true;
-    setAvatar(tempAvatar, gameIndex);
-    //ensure to show loading when fetching disable when true, maybe use redux state management for counter
+    setPendingIndex(index);
+    try {
+      const res = await fetch(`/api/games/${gameIndex}/click`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          character: avatarName,
+          xCord: scaledCoordinate?.originalX,
+          yCord: scaledCoordinate?.originalY,
+        }),
+      });
+
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+
+      const data: Data = await res.json();
+      console.log(data);
+      if (data.isCorrectCharacter) {
+        const tempAvatar = [...avatars];
+        tempAvatar[index].found = true;
+        setAvatar(tempAvatar, gameIndex);
+      }
+    } catch (err) {
+      console.log(err);
+      navigate("/error");
+    } finally {
+      setPendingIndex(null);
+    }
   };
+
   return (
-    <AlertDialog.Root open={isClicked}>
+    <AlertDialog.Root open={isClicked} onOpenChange={setIsOpen}>
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>Who did you find? </AlertDialog.Title>
         <div className="flex w-full h-fit justify-center items-center">
-          {avatars.map((avatar, index) => {
-            return (
-              <div key={index} onClick={() => handleCharachterClick(index)}>
-                <CharachterAvatar avatarObj={avatar} name="Waldo" />
-              </div>
-            );
-          })}
+          {avatars.map((avatar, index) => (
+            <div
+              key={index}
+              onClick={() => handleCharachterClick(index, avatar.name)}
+              style={{
+                opacity:
+                  pendingIndex !== null && pendingIndex !== index ? 0.5 : 1,
+                pointerEvents: pendingIndex !== null ? "none" : "auto",
+              }}
+            >
+              <CharachterAvatar avatarObj={avatar} name={avatar.name} />
+            </div>
+          ))}
         </div>
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>

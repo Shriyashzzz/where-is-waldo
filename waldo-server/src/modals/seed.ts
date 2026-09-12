@@ -68,8 +68,8 @@ async function main(): Promise<void> {
     data: {
       character: Character.GandalfWaldo,
       gameId: gameEasy.id,
-      xCord: 1135,
-      yCord: 974,
+      xCord: 1342,
+      yCord: 978,
     },
   });
   const yellowWaldo = await prisma.characterCoordinate.create({

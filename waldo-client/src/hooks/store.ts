@@ -5,7 +5,7 @@ import WaldoAvatar3 from "../../src/assets/images/game/characters/waldo3.png";
 import WaldoAvatar4 from "../../src/assets/images/game/characters/waldo4.png";
 import WaldoAvatar5 from "../../src/assets/images/game/characters/waldo5.png";
 
-type CharactersName =
+export type CharactersName =
   | "YellowWaldo"
   | "Dog"
   | "GirlWaldo"

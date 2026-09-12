@@ -9,7 +9,6 @@ export const isWithInBounds = (
 ) => {
   const x_diff = Math.abs(originalCord.x_cord - clickedCord.x_cord);
   const y_diff = Math.abs(originalCord.y_cord - clickedCord.y_cord);
-
-  if (x_diff < 25 && y_diff < 25) return true;
+  if (x_diff < 60 && y_diff < 60) return true;
   return false;
 };

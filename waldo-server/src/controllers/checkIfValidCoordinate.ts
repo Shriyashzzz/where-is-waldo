@@ -59,6 +59,7 @@ const checkIfValidCoordinate = [
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors);
       return next(new AppError("Ivalid user DataType", 400, false, true));
     }
     const { index, character, xCord, yCord }: Props = matchedData(req);
@@ -66,12 +67,10 @@ const checkIfValidCoordinate = [
     const currLevel = getLevelFromIndex(gameIndex);
     // get the specific character's original coordinate
     if (charactersStore.isAllFound(gameIndex))
-      return res
-        .status(409)
-        .json({
-          message: "All the characters have already been found",
-          allFound: charactersStore.isAllFound(gameIndex),
-        });
+      return res.status(409).json({
+        message: "All the characters have already been found",
+        allFound: charactersStore.isAllFound(gameIndex),
+      });
     const { ok, X_Cord, Y_Cord } = await queries.getTrueCoordinate(
       currLevel!,
       character,
@@ -92,17 +91,15 @@ const checkIfValidCoordinate = [
       originalCoordinate,
       clickedCoordinate,
     );
-    let isCorrect = false;
     if (isWithinBounds) {
       try {
         charactersStore.found(gameIndex, character);
-        isCorrect = true;
       } catch (e) {
         next(e);
       }
     }
     return res.status(200).json({
-      isCorrectCharacter: isCorrect,
+      isCorrectCharacter: isWithinBounds,
       clickedX: xCord,
       clickedY: yCord,
       foundCharacter: character,

@@ -65,7 +65,13 @@ const checkIfValidCoordinate = [
     let gameIndex = parseInt(index);
     const currLevel = getLevelFromIndex(gameIndex);
     // get the specific character's original coordinate
-
+    if (charactersStore.isAllFound(gameIndex))
+      return res
+        .status(409)
+        .json({
+          message: "All the characters have already been found",
+          allFound: charactersStore.isAllFound(gameIndex),
+        });
     const { ok, X_Cord, Y_Cord } = await queries.getTrueCoordinate(
       currLevel!,
       character,

@@ -4,6 +4,7 @@ import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
 import { Button } from "@radix-ui/themes";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
 import { useParams } from "react-router";
+import { MyStopwatch } from "../components/MyStopwatch.js";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -29,24 +30,27 @@ export function PlayGame() {
   };
 
   return (
-    <div className="flex flex-col items-center md:flex-row justify-center md:m-10">
-      <SideCharachterWaldo gameIndex={gameIndex} />
-      <section className="h-fit w-full bg-inherit flex items-center justify-center">
-        <ImageContainer
-          containerRef={imgContainer}
-          imgRef={imgRef}
-          currentImgScale={currentImgScale}
-          gameIndex={gameIndex}
-        />
-      </section>
+    <div className="flex flex-col justify-center items-center p-2">
+      <MyStopwatch />
+      <div className="flex flex-col items-center lg:flex-row justify-center md:m-10 md:mt-1 ">
+        <SideCharachterWaldo gameIndex={gameIndex} />
+        <section className="h-fit w-full bg-inherit flex items-center justify-center">
+          <ImageContainer
+            containerRef={imgContainer}
+            imgRef={imgRef}
+            currentImgScale={currentImgScale}
+            gameIndex={gameIndex}
+          />
+        </section>
 
-      <div className="flex flex-col gap-4 m-2 not-md:flex-row">
-        <Button color={"tomato"} size={"3"} onClick={handleZoomin}>
-          <ZoomInIcon />
-        </Button>
-        <Button color={"tomato"} size={"3"} onClick={handleZoomOut}>
-          <ZoomOutIcon />
-        </Button>
+        <div className="flex flex-col gap-4 m-2 not-lg:flex-row">
+          <Button color={"tomato"} size={"3"} onClick={handleZoomin}>
+            <ZoomInIcon />
+          </Button>
+          <Button color={"tomato"} size={"3"} onClick={handleZoomOut}>
+            <ZoomOutIcon />
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -86,6 +86,7 @@ export function FoundAlert({
 
         if (data.allFound) {
           allCharacterFound(gameIndex);
+          updateState({ justFinished: true });
           updateState({ isAllFound: true });
         }
         setIsOpen(false);

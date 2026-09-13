@@ -56,8 +56,6 @@ export function PlayGame() {
         isAllFound: false,
         currGameIndex: gameIndex,
       });
-
-      //send request to server to start it's timer too
     }
     return () => resetState();
   }, [startTimer]);

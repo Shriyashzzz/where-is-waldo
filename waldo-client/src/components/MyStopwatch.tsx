@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
 import { useGameState } from "../hooks/gameState";
+import { TimerDialog } from "./TImerDialog";
 
 export function MyStopwatch() {
-  const { isAllFound, currGameIndex, isStart } = useGameState();
+  const { isAllFound, currGameIndex, isStart, justFinished } = useGameState();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [time, setTime] = useState<string>("");
   useEffect(() => {
     if (isStart) {
       start();
     }
-    if (isAllFound) {
+  }, [isStart]);
+
+  useEffect(() => {
+    console.log(hours, minutes, seconds);
+    if (justFinished) {
       pause();
+      const time: string = `${hours}:${minutes}:${seconds}:${milliseconds}`;
+      setTime(time);
       setOpenDialog(true);
     }
-  }, [isStart, isAllFound, currGameIndex]);
+  }, [justFinished]);
 
   const {
     totalSeconds,
@@ -28,19 +36,18 @@ export function MyStopwatch() {
     reset,
   } = useStopwatch({ autoStart: false, interval: 20 });
 
-  const handleSendLeaderBoardScore = () => {};
   return (
     <div className="text-center h-fit  w-50 flex flex-col justify-center items">
       <div className="text-xl text-white highlight highlight-variant-8 highlight-green-500">
         <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
         <span>{seconds}</span>:<span>{milliseconds}</span>
       </div>
-
-      {/* <p>{isRunning ? "Running" : "Not running"}</p> */}
-
-      {/* <button onClick={start}>Start</button>
-      <button onClick={pause}>Pause</button>
-      <button onClick={() => reset()}>Reset</button> */}
+      <TimerDialog
+        isOpen={openDialog}
+        time={time}
+        setIsOpen={setOpenDialog}
+        gameIndex={currGameIndex}
+      />
     </div>
   );
 }

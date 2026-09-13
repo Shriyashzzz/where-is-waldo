@@ -150,7 +150,7 @@ export default function ImageContainer({
       )}
 
       <div
-        className="relative inline-block origin-top-left"
+        className="relative inlblockine- origin-top-left"
         style={{ transform: `scale(${currentImgScale})` }}
       >
         <img
@@ -158,13 +158,6 @@ export default function ImageContainer({
           src={gameImage}
           className="relative max-w-full max-h-[80vh] block object-contain origin-top-left"
           draggable={false}
-        />
-        <div
-          className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
-            pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden
-            ${visible && !isClicked ? "block" : "hidden"}
-            `}
-          style={lensStyle}
         />
 
         {foundCharachters.map((arr) => {
@@ -183,6 +176,13 @@ export default function ImageContainer({
           );
         })}
       </div>
+      <div
+        className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
+            pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden 
+            ${visible && !isClicked ? "block" : "hidden"}
+            `}
+        style={lensStyle}
+      />
     </div>
   );
 }

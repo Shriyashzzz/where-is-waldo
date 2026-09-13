@@ -75,7 +75,7 @@ export function FoundAlert({
           });
           return tempArr;
         });
-        setTimeout(() => setIsOpen(false), 300);
+        setIsOpen(false);
       }
     } catch (err) {
       console.log(err);

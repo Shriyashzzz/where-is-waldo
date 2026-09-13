@@ -1,10 +1,11 @@
 import ImageContainer from "../components/GameImage.js";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
 import { Button } from "@radix-ui/themes";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
 import { useParams } from "react-router";
 import { MyStopwatch } from "../components/MyStopwatch.js";
+import { useGameState } from "../hooks/gameState.js";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -12,12 +13,13 @@ export interface OriginalCordinate {
 }
 
 export function PlayGame() {
+  const { isStart, isAllFound, updateState, resetState } = useGameState();
   const imgContainer = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const [currentImgScale, setCurrentImageScale] = useState<number>(1);
   const { gameNumber } = useParams<string>();
   const gameIndex: number = Number(gameNumber); // corresponds to zustand store avatars state info index position for each game
-
+  const [startTimer, setStartTimer] = useState<boolean>(false);
   const handleZoomin = () => {
     setCurrentImageScale((s) => s * 2);
   };
@@ -29,12 +31,28 @@ export function PlayGame() {
     }
   };
 
+  useEffect(() => {
+    if (!isStart && startTimer) {
+      updateState({
+        isStart: true,
+        isAllFound: isAllFound,
+        currGameIndex: gameIndex,
+      });
+
+      //send request to server to start it's timer too
+    }
+    return () => resetState();
+  }, [startTimer]);
+
   return (
     <div className="flex flex-col justify-center items-center p-2">
       <MyStopwatch />
       <div className="flex flex-col items-center lg:flex-row justify-center md:m-10 md:mt-1 ">
         <SideCharachterWaldo gameIndex={gameIndex} />
-        <section className="h-fit w-full bg-inherit flex items-center justify-center">
+        <section
+          className="h-fit w-full bg-inherit flex items-center justify-center"
+          onClick={() => !startTimer && setStartTimer(true)}
+        >
           <ImageContainer
             containerRef={imgContainer}
             imgRef={imgRef}

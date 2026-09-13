@@ -10,6 +10,7 @@ interface CharactersState {
   found: (index: number, key: CharactersName) => void;
   getLength: () => number;
   isAllFound: (gameIndex: number) => boolean;
+  setAllFound: (gameIndex: number) => void;
   reset: () => void;
 }
 
@@ -64,6 +65,17 @@ export const charactersStore: CharactersState = {
       );
     const allFound: boolean = Object.values(avatar).every(Boolean);
     return allFound;
+  },
+  setAllFound: (gameIndex: number) => {
+    const newAvatars = charactersStore.avatars;
+    newAvatars[gameIndex] = {
+      YellowWaldo: true,
+      Dog: true,
+      GirlWaldo: true,
+      Waldo: true,
+      GandalfWaldo: true,
+    };
+    charactersStore.avatars = newAvatars;
   },
 
   reset: () => {

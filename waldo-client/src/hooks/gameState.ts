@@ -5,9 +5,9 @@ type GameState = {
   currGameIndex: number;
   isStart: boolean;
   updateState: (newState: {
-    isAllFound: boolean;
-    currGameIndex: number;
-    isStart: boolean;
+    isAllFound?: boolean;
+    currGameIndex?: number;
+    isStart?: boolean;
   }) => void;
   resetState: () => void;
 };
@@ -17,8 +17,8 @@ export const useGameState = create<GameState>()((set) => ({
   currGameIndex: -1,
   isStart: false,
   updateState: (newState) =>
-    set(() => {
-      return newState;
+    set((state) => {
+      return { ...state, ...newState };
     }),
   resetState: () =>
     set(() => {

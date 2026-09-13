@@ -6,6 +6,7 @@ import { useCharacter, type CharactersName } from "../hooks/store";
 import { useNavigate } from "react-router";
 import type { FoundCharahters } from "./GameImage";
 import type { Coords } from "./GameImage";
+import { useGameState } from "../hooks/gameState";
 
 interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
@@ -32,11 +33,12 @@ export function FoundAlert({
   setFoundCharachters,
   currentClickedCoordinate,
 }: Props) {
+  const { updateState, isAllFound } = useGameState();
   const avatars = useCharacter((s) => s.avatars[gameIndex]);
   const setAvatar = useCharacter((s) => s.updateAvatar);
   const navigate = useNavigate();
   const [pendingIndex, setPendingIndex] = useState<number | null>(null);
-
+  const allCharacterFound = useCharacter((s) => s.allCharacterFound);
   const handleCharachterClick = async (
     index: number,
     avatarName: CharactersName,
@@ -58,11 +60,17 @@ export function FoundAlert({
           yCord: scaledCoordinate?.originalY,
         }),
       });
-
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      if (res.status == 409) {
+        updateState({ isAllFound: true });
+        allCharacterFound(gameIndex);
+        return;
+      } else if (!res.ok) {
+        throw new Error(`Request failed: ${res.status}`);
+      }
 
       const data: Data = await res.json();
       console.log(data);
+
       if (data.isCorrectCharacter) {
         const tempAvatar = [...avatars];
         tempAvatar[index].found = true;
@@ -75,6 +83,11 @@ export function FoundAlert({
           });
           return tempArr;
         });
+
+        if (data.allFound) {
+          allCharacterFound(gameIndex);
+          updateState({ isAllFound: true });
+        }
         setIsOpen(false);
       }
     } catch (err) {

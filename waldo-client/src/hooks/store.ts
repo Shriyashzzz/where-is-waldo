@@ -21,6 +21,7 @@ interface Avatar {
 export interface CharacterStore {
   avatars: Array<Array<Avatar>>;
   updateAvatar: (newAvatar: Avatar[], index: number) => void;
+  allCharacterFound: (gameIndex: number) => void;
 }
 
 export const useCharacter = create<CharacterStore>()((set) => ({
@@ -60,4 +61,13 @@ export const useCharacter = create<CharacterStore>()((set) => ({
       updated[index] = newAvatars;
       return { avatars: updated };
     }),
+  allCharacterFound: (gameIndex) => {
+    set((state) => {
+      const newState = [...state.avatars];
+      newState[gameIndex] = newState[gameIndex].map((av) => {
+        return { ...av, found: true };
+      });
+      return { avatars: newState };
+    });
+  },
 }));

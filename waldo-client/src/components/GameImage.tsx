@@ -8,6 +8,8 @@ import waldoMedium from "../../src/assets/images/game/levels/medium.jpg";
 import waldoHard from "../../src/assets/images/game/levels/hard.jpg";
 import waldoGodMode from "../../src/assets/images/game/levels/godMode.jpg";
 import { Check } from "lucide-react";
+import { useGameState } from "../hooks/gameState";
+import { SideCharachterWaldo } from "./SideWaldoCharachter";
 
 const ZOOM = 2; // make this an state later
 
@@ -31,7 +33,7 @@ export default function ImageContainer({
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  const [gameImage, setGameImg] = useState<string>("");
+  const [gameImage, setGameImg] = useState<string | null>(null);
   const LENS_SIZE = 128; // to fit w-32, h-32 maginifying glass
   const [scaledCoordinate, setScaledCoordiane] = useState<
     OriginalCordinate | undefined
@@ -40,6 +42,7 @@ export default function ImageContainer({
     xCord: 0,
     yCord: 0,
   });
+  const isAllFound = useGameState((s) => s.isAllFound);
   const [foundCharachters, setFoundCharachters] = useState<FoundCharahters>([]);
   useEffect(() => {
     switch (gameIndex) {
@@ -61,12 +64,12 @@ export default function ImageContainer({
   const handleImageClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    if (isAllFound) return;
     const mouseCordinate: MouseCordinate = {
       X: e.clientX,
       Y: e.clientY,
     };
     if (isFirstClick) {
-      //start stopwatch
       console.log("stopwatch started");
       setIsFirstClick(false);
     }
@@ -130,6 +133,7 @@ export default function ImageContainer({
       backgroundPosition: `${-(imgX * ZOOM - LENS_SIZE / 2)}px ${-(imgY * ZOOM - LENS_SIZE / 2)}px`,
     });
   };
+
   return (
     <div
       ref={containerRef}
@@ -141,7 +145,7 @@ export default function ImageContainer({
       onClick={(e) => {
         !isClicked && handleImageClick(e);
       }}
-      className="relative flex overflow-scroll justify-center flex-col items-center cursor-crosshair select-none h-fit md:h-full w-full"
+      className="relative flex overflow-scroll justify-center flex-col items-center cursor-crosshair select-none h-fit md:h-full w-full "
     >
       {isClicked && (
         <FoundAlert
@@ -155,36 +159,57 @@ export default function ImageContainer({
       )}
 
       <div
-        className="relative inlblockine- origin-top-left"
+        className={`relative inline-block origin-top-left `}
         style={{ transform: `scale(${currentImgScale})` }}
       >
-        <img
-          ref={imgRef}
-          src={gameImage}
-          className="relative max-w-full max-h-[80vh] block object-contain origin-top-left"
-          draggable={false}
-        />
+        <div
+          className={`${isAllFound && "relative highlight highlight-variant-2 highlight-red-700 after:z-10 after:pointer-events-none"}`}
+        >
+          {gameImage && (
+            <img
+              ref={imgRef}
+              src={gameImage}
+              className="relative z-0 max-w-full max-h-[80vh] block object-contain origin-top-left"
+              draggable={false}
+            />
+          )}
 
-        {foundCharachters.map((arr) => {
-          if (!imgRef.current) return null;
-          const leftPct = (arr.xCord / imgRef.current.naturalWidth) * 100;
-          const topPct = (arr.yCord / imgRef.current.naturalHeight) * 100;
+          {isAllFound && (
+            <div className="absolute inset-0 flex-col z-20 flex items-center justify-center pointer-events-none">
+              <span className="highlight highlight-variant-2  highlight-red-700 text-4xl md:text-5xl font-bold text-white px-2">
+                Game over
+              </span>
 
-          return (
-            <div
-              key={`${arr.xCord}-${arr.yCord}`}
-              style={{ left: `${leftPct}%`, top: `${topPct}%` }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center size-6  highlight highlight-variant-3 highlight-sky-600  pointer-events-none"
-            >
-              <Check className="size-4 text-white" strokeWidth={4} />
+              <SideCharachterWaldo
+                gameIndex={gameIndex}
+                orientation={"flex-row"}
+                noChange={true}
+              />
             </div>
-          );
-        })}
+          )}
+        </div>
+
+        {!isAllFound &&
+          foundCharachters.map((arr) => {
+            if (!imgRef.current) return null;
+            const leftPct = (arr.xCord / imgRef.current.naturalWidth) * 100;
+            const topPct = (arr.yCord / imgRef.current.naturalHeight) * 100;
+
+            return (
+              <div
+                key={`${arr.xCord}-${arr.yCord}`}
+                style={{ left: `${leftPct}%`, top: `${topPct}%` }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center size-6  highlight highlight-variant-3 highlight-sky-600  pointer-events-none"
+              >
+                <Check className="size-4 text-white" strokeWidth={4} />
+              </div>
+            );
+          })}
       </div>
       <div
         className={`absolute w-32 h-32 rounded-full border-4 border-white/80 shadow-lg
             pointer-events-none bg-no-repeat -translate-x-1/2 -translate-y-1/2 not-md:hidden 
-            ${visible && !isClicked ? "block" : "hidden"}
+            ${visible && !isClicked && !isAllFound ? "block" : "hidden"} 
             `}
         style={lensStyle}
       />

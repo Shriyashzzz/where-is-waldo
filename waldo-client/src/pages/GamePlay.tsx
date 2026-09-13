@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
 import { Button } from "@radix-ui/themes";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import { MyStopwatch } from "../components/MyStopwatch.js";
 import { useGameState } from "../hooks/gameState.js";
+import { useCharacter } from "../hooks/store.js";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -14,6 +15,7 @@ export interface OriginalCordinate {
 
 export function PlayGame() {
   const { isStart, isAllFound, updateState, resetState } = useGameState();
+  const { allCharacterFound } = useCharacter();
   const imgContainer = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const [currentImgScale, setCurrentImageScale] = useState<number>(1);
@@ -30,12 +32,28 @@ export function PlayGame() {
       setCurrentImageScale((s) => s / 2);
     }
   };
+  useEffect(() => {
+    async function fetchFn() {
+      const response = await fetch(`/api/games/${gameIndex}/gamestatus`);
+      if (!response.ok) <Navigate to={"/error"} />;
+      const data: { finished: boolean } = await response.json();
+      if (data.finished) {
+        allCharacterFound(gameIndex);
+        updateState({
+          isStart: false,
+          isAllFound: true,
+          currGameIndex: gameIndex,
+        });
+      }
+    }
+    fetchFn();
+  }, []);
 
   useEffect(() => {
-    if (!isStart && startTimer) {
+    if (!isStart && startTimer && !isAllFound) {
       updateState({
         isStart: true,
-        isAllFound: isAllFound,
+        isAllFound: false,
         currGameIndex: gameIndex,
       });
 
@@ -50,7 +68,7 @@ export function PlayGame() {
       <div className="flex flex-col items-center lg:flex-row justify-center md:m-10 md:mt-1 ">
         <SideCharachterWaldo gameIndex={gameIndex} />
         <section
-          className="h-fit w-full bg-inherit flex items-center justify-center"
+          className={`h-fit w-full bg-inherit flex items-center justify-center `}
           onClick={() => !startTimer && setStartTimer(true)}
         >
           <ImageContainer
@@ -61,7 +79,7 @@ export function PlayGame() {
           />
         </section>
 
-        <div className="flex flex-col gap-4 m-2 not-lg:flex-row">
+        <div className="flex flex-col gap-4 m-2 not-lg:flex-row ">
           <Button color={"tomato"} size={"3"} onClick={handleZoomin}>
             <ZoomInIcon />
           </Button>

@@ -13,7 +13,6 @@ interface Props {
 
 export function CharachterAvatar({ avatarObj, name }: Props) {
   const found = avatarObj?.found ?? false;
-
   return (
     <Avatar.Root className="relative inline-flex size-11.25 select-none items-center justify-center overflow-hidden rounded-full bg-blackA1 align-middle bg-white p-1">
       <Avatar.Image

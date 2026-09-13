@@ -3,18 +3,17 @@ import { useStopwatch } from "react-timer-hook";
 import { useGameState } from "../hooks/gameState";
 
 export function MyStopwatch() {
-  const { isAllFound, gameIndex, isStart } = useGameState();
+  const { isAllFound, currGameIndex, isStart } = useGameState();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   useEffect(() => {
     if (isStart) {
       start();
-    } else {
-      pause();
     }
-    if (isAllFound && !isStart) {
+    if (isAllFound) {
+      pause();
       setOpenDialog(true);
     }
-  }, [isStart, isAllFound]);
+  }, [isStart, isAllFound, currGameIndex]);
 
   const {
     totalSeconds,

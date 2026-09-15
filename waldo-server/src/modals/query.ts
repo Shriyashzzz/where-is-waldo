@@ -25,6 +25,24 @@ class Queries {
       return { ok: false };
     }
   }
+
+  async getLeaderBoard(gameIndex: number) {
+    try {
+      const currLeaderBoard = await prisma.leaderBoard.findMany({
+        where: {
+          gameId: gameIndex,
+        },
+        orderBy: [
+          {
+            time: "asc",
+          },
+        ],
+      });
+      return { ok: true, leaderBoard: currLeaderBoard };
+    } catch (e) {
+      return { ok: false };
+    }
+  }
 }
 
 const queries = new Queries();

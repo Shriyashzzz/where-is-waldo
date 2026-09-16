@@ -61,11 +61,11 @@ describe("Coordinate verify for Waldo Easy ", () => {
     request(app)
       .post("/api/games/0/click")
       .type("form")
-      .send({ character: "Waldo", xCord: 892, yCord: 925 })
+      .send({ character: "Waldo", xCord: 952, yCord: 925 })
       .expect(
         {
           isCorrectCharacter: false,
-          clickedX: "892",
+          clickedX: "952",
           clickedY: "925",
           foundCharacter: "Waldo",
           allFound: false,
@@ -112,12 +112,12 @@ describe("Coordinate verify for Waldo Easy ", () => {
     request(app)
       .post("/api/games/0/click")
       .type("form")
-      .send({ character: "Waldo", xCord: 866, yCord: 951 })
+      .send({ character: "Waldo", xCord: 866, yCord: 1001 })
       .expect(
         {
           isCorrectCharacter: false,
           clickedX: "866",
-          clickedY: "951",
+          clickedY: "1001",
           foundCharacter: "Waldo",
           allFound: false,
         },
@@ -157,7 +157,7 @@ describe("Finding all charachters returns true for all found", () => {
     const gandfalfEasy = await request(app)
       .post("/api/games/0/click")
       .type("form")
-      .send({ character: "GandalfWaldo", xCord: 1135, yCord: 974 });
+      .send({ character: "GandalfWaldo", xCord: 1342, yCord: 978 });
     expect(gandfalfEasy.status).toBe(200);
     expect(gandfalfEasy.body.isCorrectCharacter).toBe(true);
     expect(gandfalfEasy.body.allFound).toBe(false);

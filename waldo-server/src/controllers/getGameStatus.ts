@@ -20,7 +20,7 @@ export const getGameStatus = [
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(new AppError("Ivalid user DataType", 400, false, true));
+      return next(new AppError("Invalid user DataType", 400, false, true));
     }
     const { index } = matchedData(req);
     return res

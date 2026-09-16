@@ -15,7 +15,8 @@ async function main(): Promise<void> {
   await prisma.characterCoordinate.deleteMany();
   await prisma.user.deleteMany();
   await prisma.leaderBoard.deleteMany();
-
+  console.log("ENV:", process.env.ENV);
+  console.log("DATABASE_URL set:", !!process.env.DATABASE_URL);
   //init the games
   const gameEasy = await prisma.game.create({
     data: {
@@ -72,7 +73,7 @@ async function main(): Promise<void> {
       yCord: 978,
     },
   });
-  const yellowWaldo = await prisma.characterCoordinate.create({
+  const yellowEasy = await prisma.characterCoordinate.create({
     data: {
       character: Character.YellowWaldo,
       gameId: gameEasy.id,

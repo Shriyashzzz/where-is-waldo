@@ -84,6 +84,7 @@ export const leaderBoardController = {
       );
       if (!dbResponse.ok)
         next(new AppError("Internal Server Error", 500, false, true));
+      console.log(dbResponse.data?.score);
       return res
         .status(200)
         .json({ message: "new score added to the leaderboard" });

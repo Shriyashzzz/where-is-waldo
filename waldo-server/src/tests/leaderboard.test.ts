@@ -92,6 +92,5 @@ describe("leaderBoard route test", () => {
       .send();
 
     expect(res.status).toBe(200);
-    // add further assertions on res.body once you know the expected shape
   });
 });

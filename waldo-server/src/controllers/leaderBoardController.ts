@@ -10,7 +10,6 @@ import { AppError } from "../errors/AppError.js";
 import { charactersStore } from "../modals/characterStore.js";
 import queries from "../modals/query.js";
 import { formatError } from "../util/formatError";
-import App from "../../../waldo-client/src/App";
 
 const validateGameIndex = [
   param("index")

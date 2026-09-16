@@ -36,13 +36,13 @@ model User {
 }
 
 model LeaderBoard {
-  id     Int   @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   userId Int
-  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   gameId Int
   level  Level
-  game   Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  time   Float
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  time   String
 }
 
 enum Level {

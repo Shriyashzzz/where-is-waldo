@@ -1,9 +1,17 @@
 import type { NextFunction, Response, Request } from "express";
-
-import { validationResult, matchedData, param, body } from "express-validator";
+import {
+  validationResult,
+  type Result,
+  matchedData,
+  param,
+  body,
+} from "express-validator";
 import { AppError } from "../errors/AppError.js";
 import { charactersStore } from "../modals/characterStore.js";
 import queries from "../modals/query.js";
+import { formatError } from "../util/formatError";
+import App from "../../../waldo-client/src/App";
+
 const validateGameIndex = [
   param("index")
     .trim()
@@ -19,20 +27,67 @@ const validateGameIndex = [
     }),
 ];
 
+const validateLeaderBoardStats = [
+  body("userName")
+    .trim()
+    .notEmpty()
+    .isString()
+    .isLength({ min: 1, max: 20 })
+    .withMessage("UserName has to be of string datatype,between 1 & 20"),
+  body("time")
+    .trim()
+    .notEmpty()
+    .isString()
+    .custom((val) => {
+      if (val === "0:0:0:953") throw new Error("Time cannot be zero");
+      let timeRegex = /([0-9]+(:[0-9]+)+)/i;
+      if (timeRegex.test(val)) {
+        return val;
+      } else {
+        throw new Error("Invalid time value");
+      }
+    }),
+];
+
 export const leaderBoardController = {
   getAllStats: [
     ...validateGameIndex,
     async (req: Request, res: Response, next: NextFunction) => {
-      const errors = validationResult(req);
+      const errors: Result = validationResult(req);
       if (!errors.isEmpty())
         return next(new AppError("Invalid URI value Value", 400, true, false));
       const { index } = matchedData(req);
-      const response = await queries.getLeaderBoard(index);
-      if (response.ok) {
-        return res.status(400).json({ leaderBoard: response.leaderBoard });
+      const dbResponse = await queries.getLeaderBoard(index);
+      if (dbResponse.ok && dbResponse.data) {
+        return res
+          .status(400)
+          .json({ leaderBoard: dbResponse.data.leaderBoard });
       } else {
         return next(new AppError("Internal Server Error", 503, false, true));
       }
+    },
+  ],
+
+  postStat: [
+    ...validateGameIndex,
+    ...validateLeaderBoardStats,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const errors: Result = validationResult(req);
+      if (!errors.isEmpty()) {
+        const formattedError = formatError(errors);
+        return next(new AppError(formattedError, 400, false, true));
+      }
+      const { userName, time, index } = matchedData(req);
+      const dbResponse = await queries.postLeaderBoardScore(
+        index,
+        userName,
+        time,
+      );
+      if (!dbResponse.ok)
+        next(new AppError("Internal Server Error", 500, false, true));
+      return res
+        .status(200)
+        .json({ message: "new score added to the leaderboard" });
     },
   ],
 };

@@ -71,11 +71,8 @@ const checkIfValidCoordinate = [
         message: "All the characters have already been found",
         allFound: charactersStore.isAllFound(gameIndex),
       });
-    const { ok, X_Cord, Y_Cord } = await queries.getTrueCoordinate(
-      currLevel!,
-      character,
-    );
-    if (!X_Cord || !Y_Cord) return res.sendStatus(400); // undefined clicked coordinate
+    const { ok, data } = await queries.getTrueCoordinate(currLevel!, character);
+    if (!data || !data.X_Cord || !data.Y_Cord) return res.sendStatus(400); // undefined clicked coordinate
     if (!ok)
       return next(
         new AppError(
@@ -86,7 +83,7 @@ const checkIfValidCoordinate = [
         ),
       );
     const clickedCoordinate = { x_cord: xCord, y_cord: yCord };
-    const originalCoordinate = { x_cord: X_Cord, y_cord: Y_Cord };
+    const originalCoordinate = { x_cord: data.X_Cord, y_cord: data.Y_Cord };
     const isWithinBounds = isWithInBounds(
       originalCoordinate,
       clickedCoordinate,

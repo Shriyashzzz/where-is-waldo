@@ -49,17 +49,20 @@ const validateLeaderBoardStats = [
 ];
 
 export const leaderBoardController = {
-  getAllStats: [
+  getGameLeaderBoard: [
     ...validateGameIndex,
     async (req: Request, res: Response, next: NextFunction) => {
       const errors: Result = validationResult(req);
-      if (!errors.isEmpty())
+      if (!errors.isEmpty()) {
         return next(new AppError("Invalid URI value Value", 400, true, false));
+      }
+
       const { index } = matchedData(req);
-      const dbResponse = await queries.getLeaderBoard(index);
+      const numGameIndex: number = parseInt(index);
+      const dbResponse = await queries.getLeaderBoard(numGameIndex);
       if (dbResponse.ok && dbResponse.data) {
         return res
-          .status(400)
+          .status(200)
           .json({ leaderBoard: dbResponse.data.leaderBoard });
       } else {
         return next(new AppError("Internal Server Error", 503, false, true));

@@ -5,7 +5,6 @@ import config from "../config/config";
 import { Level } from "../../generated/prisma/client";
 
 describe("leaderBoard route test", () => {
-  // test this with local database
   let userAlice: { id: number };
   let userBob: { id: number };
   let userCharlie: { id: number };
@@ -15,7 +14,7 @@ describe("leaderBoard route test", () => {
   let gameGodlike: { id: number };
 
   beforeAll(async () => {
-    // fetch existing games (assumes seed script has already run)
+    // fetch existing games
     gameEasy = await prisma.game.findUniqueOrThrow({
       where: { level: Level.Easy },
     });
@@ -73,24 +72,33 @@ describe("leaderBoard route test", () => {
 
   afterAll(async () => {
     // cleanup: delete leaderboard test data
-    await prisma.leaderBoard.deleteMany({
-      where: {
-        userId: { in: [userAlice.id, userBob.id, userCharlie.id] },
-      },
-    });
-    await prisma.user.deleteMany({
-      where: {
-        id: { in: [userAlice.id, userBob.id, userCharlie.id] },
-      },
-    });
+    await prisma.leaderBoard.deleteMany();
+    await prisma.user.deleteMany();
     await prisma.$disconnect();
   });
 
-  it("Get all LeaderBoards", async () => {
-    const res = await request(app)
-      .post(`/api/games/${gameEasy.id}/leaderBoard/highScores`)
-      .send();
-
-    expect(res.status).toBe(200);
+  it("Get Easy Game LeaderBoards", (done) => {
+    request(app)
+      .get(`/api/games/${gameEasy.id}/leaderBoard/highScores`)
+      .expect(200)
+      .expect((res) =>
+        expect(res.body).toEqual({
+          leaderBoard: expect.arrayContaining([
+            expect.objectContaining({
+              userId: userAlice.id,
+              gameId: gameEasy.id,
+              level: "Easy",
+              time: "00:45.23",
+            }),
+            expect.objectContaining({
+              userId: userBob.id,
+              gameId: gameEasy.id,
+              level: "Easy",
+              time: "00:52.10",
+            }),
+          ]),
+        }),
+      )
+      .end(done);
   });
 });

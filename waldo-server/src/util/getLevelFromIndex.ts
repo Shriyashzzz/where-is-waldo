@@ -6,9 +6,9 @@ export const getLevelFromIndex = (gameIndex: number) => {
       return Level.Easy;
     case 1:
       return Level.Medium;
-    case 3:
+    case 2:
       return Level.Hard;
-    case 4:
+    case 3:
       return Level.God;
   }
 };

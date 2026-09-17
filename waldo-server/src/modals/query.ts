@@ -46,9 +46,20 @@ class Queries {
   ): Promise<DBResponse<{ leaderBoard: any }>> {
     //define leaderboard type later
     try {
+      const gameLevel = getLevelFromIndex(gameIndex);
+
+      if (!gameLevel) {
+        return { ok: false };
+      }
+      const currGame = await prisma.game.findUniqueOrThrow({
+        where: { level: gameLevel },
+      });
       const currLeaderBoard = await prisma.leaderBoard.findMany({
         where: {
-          gameId: gameIndex,
+          gameId: currGame.id,
+        },
+        include: {
+          user: true,
         },
         orderBy: [
           {
@@ -65,16 +76,24 @@ class Queries {
   }
 
   async postLeaderBoardScore(
-    gameIndex: number,
     userName: string,
+    gameIndex: number,
     time: string,
   ): Promise<DBResponse<{ score: any }>> {
     try {
       const user = await prisma.user.create({ data: { name: userName } });
+
       const gameLevel = getLevelFromIndex(gameIndex);
+
+      if (!gameLevel) {
+        return { ok: false };
+      }
+      const currGame = await prisma.game.findUniqueOrThrow({
+        where: { level: gameLevel },
+      });
       const currScore = await prisma.leaderBoard.create({
         data: {
-          gameId: gameIndex,
+          gameId: currGame.id,
           userId: user.id,
           level: gameLevel!,
           time: time,

@@ -18,6 +18,7 @@ describe("leaderBoard route test", () => {
     gameEasy = await prisma.game.findUniqueOrThrow({
       where: { level: Level.Easy },
     });
+
     gameMedium = await prisma.game.findUniqueOrThrow({
       where: { level: Level.Medium },
     });
@@ -79,7 +80,7 @@ describe("leaderBoard route test", () => {
 
   it("Get Easy Game LeaderBoards", (done) => {
     request(app)
-      .get(`/api/games/${gameEasy.id}/leaderBoard/highScores`)
+      .get(`/api/games/0/leaderBoard/highScores`)
       .expect(200)
       .expect((res) =>
         expect(res.body).toEqual({
@@ -100,5 +101,35 @@ describe("leaderBoard route test", () => {
         }),
       )
       .end(done);
+  });
+
+  it("Post a new Game Score", async () => {
+    const res = await request(app)
+      .post(`/api/games/0/leaderBoard/postScore`)
+      .send({ userName: "TempUser", time: "0:0:0:1:234" });
+    expect(res.status).toBe(200);
+    const newRes = await request(app).get(
+      `/api/games/0/leaderBoard/highScores`,
+    );
+    expect(newRes.status).toBe(200);
+    expect(newRes.body).toEqual({
+      leaderBoard: expect.arrayContaining([
+        expect.objectContaining({
+          gameId: gameEasy.id,
+          level: "Easy",
+          time: "00:45.23",
+        }),
+        expect.objectContaining({
+          gameId: gameEasy.id,
+          level: "Easy",
+          time: "00:52.10",
+        }),
+        expect.objectContaining({
+          gameId: gameEasy.id,
+          level: "Easy",
+          time: "0:0:0:1:234",
+        }),
+      ]),
+    });
   });
 });

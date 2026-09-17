@@ -80,17 +80,26 @@ export const leaderBoardController = {
         return next(new AppError(formattedError, 400, false, true));
       }
       const { userName, time, index } = matchedData(req);
+      const numGameIndex = parseInt(index);
       const dbResponse = await queries.postLeaderBoardScore(
-        index,
         userName,
+        numGameIndex,
         time,
       );
       if (!dbResponse.ok)
-        next(new AppError("Internal Server Error", 500, false, true));
-      console.log(dbResponse.data?.score);
-      return res
-        .status(200)
-        .json({ message: "new score added to the leaderboard" });
+        return next(new AppError("Internal Server Error", 500, false, true));
+      if (!dbResponse.data) {
+        return next(
+          new AppError(
+            "Unable to submit your score to the leaderboard",
+            500,
+            false,
+            true,
+          ),
+        );
+      }
+      console.log(dbResponse.data);
+      return res.status(200).json({ score: dbResponse.data?.score });
     },
   ],
 };

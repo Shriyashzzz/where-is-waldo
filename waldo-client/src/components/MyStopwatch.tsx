@@ -4,7 +4,7 @@ import { useGameState } from "../hooks/gameState";
 import { TimerDialog } from "./TImerDialog";
 
 export function MyStopwatch() {
-  const { isAllFound, currGameIndex, isStart, justFinished } = useGameState();
+  const { currGameIndex, isStart, justFinished } = useGameState();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [time, setTime] = useState<string>("");
   useEffect(() => {
@@ -14,27 +14,19 @@ export function MyStopwatch() {
   }, [isStart]);
 
   useEffect(() => {
-    console.log(hours, minutes, seconds);
     if (justFinished) {
       pause();
       const time: string = `${hours}:${minutes}:${seconds}:${milliseconds}`;
       setTime(time);
       setOpenDialog(true);
     }
+    return () => {
+      reset();
+    };
   }, [justFinished]);
 
-  const {
-    totalSeconds,
-    milliseconds,
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    reset,
-  } = useStopwatch({ autoStart: false, interval: 20 });
+  const { milliseconds, seconds, minutes, hours, days, start, pause, reset } =
+    useStopwatch({ autoStart: false, interval: 20 });
 
   return (
     <div className="text-center h-fit  w-50 flex flex-col justify-center items">

@@ -31,6 +31,7 @@
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
+    "ignore-styles": "^5.0.1",
     "tailwindcss-highlights": "github:Shriyashzzz/tailwindcss-highlights",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.67.0",

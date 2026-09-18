@@ -1,7 +1,7 @@
 import { Flex, Button, AlertDialog } from "@radix-ui/themes";
 import { Clock } from "lucide-react";
 import { Label } from "radix-ui";
-import { useRef } from "react";
+import { useNavigate } from "react-router";
 
 type Props = {
   isOpen: boolean;
@@ -10,10 +10,41 @@ type Props = {
   time: string;
 };
 
+type RequestBody = {
+  userName: string;
+  time: string;
+};
+
 export function TimerDialog({ isOpen, setIsOpen, gameIndex, time }: Props) {
-  const addScoreToLeaderBoard = () => {
+  const navigate = useNavigate();
+  // activates when the user submits his name along with his leaderoard score
+  const addScoreToLeaderBoard = async () => {
     const name = document.getElementById("userName") as HTMLInputElement | null;
-    name && console.log(name.value);
+    if (!name) return;
+    const reqBody: RequestBody = {
+      userName: name.value,
+      time: time,
+    };
+    const response = await fetch(
+      `/api/games/${gameIndex}/leaderBoard/postScore/`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
+      },
+    );
+    if (!response.ok) {
+      setIsOpen(false);
+      console.log("Error: unable to add score to the leaderboard");
+      navigate("/error");
+    }
+    const data = await response.json();
+    console.log(data);
+    setIsOpen(false);
+    navigate("/", { viewTransition: true });
   };
 
   return (
@@ -38,6 +69,9 @@ export function TimerDialog({ isOpen, setIsOpen, gameIndex, time }: Props) {
                 className="inline-flex appearance-none items-center justify-center rounded bg-blackA2 px-2.5 text-[15px] leading-none text-black shadow-[0_0_0_1px] shadow-blackA6 outline-none selection:bg-blackA6 selection:text-black focus:shadow-[0_0_0_2px_black]"
                 type="text"
                 id="userName"
+                required
+                min={1}
+                max={20}
               />
             </span>
           </span>

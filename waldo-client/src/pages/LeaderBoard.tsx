@@ -1,3 +1,6 @@
+import { useParams } from "react-router";
 export function LeaderBoardPage() {
-  return <>Here should be the leaderboard </>;
+  const { gameIndex } = useParams();
+  console.log(gameIndex);
+  return <></>;
 }

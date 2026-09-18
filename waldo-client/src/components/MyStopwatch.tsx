@@ -21,7 +21,7 @@ export function MyStopwatch() {
       setOpenDialog(true);
     }
     return () => {
-      reset();
+      reset(undefined, false);
     };
   }, [justFinished]);
 

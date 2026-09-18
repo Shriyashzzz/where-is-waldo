@@ -29,7 +29,6 @@ export default function ImageContainer({
   currentImgScale,
   gameIndex,
 }: Prop) {
-  const [isFirstClick, setIsFirstClick] = useState<boolean>(true);
   const [visible, setVisible] = useState<boolean>(false);
   const [lensStyle, setLensStyle] = useState({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
@@ -69,10 +68,6 @@ export default function ImageContainer({
       X: e.clientX,
       Y: e.clientY,
     };
-    if (isFirstClick) {
-      console.log("stopwatch started");
-      setIsFirstClick(false);
-    }
     const containerCordinate: ContainerCoordinate = {
       left: containerRef.current?.getBoundingClientRect().left ?? null,
       top: containerRef.current?.getBoundingClientRect().top ?? null,

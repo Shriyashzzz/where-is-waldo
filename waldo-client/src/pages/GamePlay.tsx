@@ -7,6 +7,7 @@ import { Navigate, useParams } from "react-router";
 import { MyStopwatch } from "../components/MyStopwatch.js";
 import { useGameState } from "../hooks/gameState.js";
 import { useCharacter } from "../hooks/store.js";
+import { useNavigate } from "react-router";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -14,6 +15,8 @@ export interface OriginalCordinate {
 }
 
 export function PlayGame() {
+  const navigate = useNavigate();
+
   const { isStart, isAllFound, updateState, resetState } = useGameState();
   const { allCharacterFound, resetCharacterStore } = useCharacter();
   const imgContainer = useRef<HTMLDivElement | null>(null);
@@ -22,6 +25,12 @@ export function PlayGame() {
   const { gameNumber } = useParams<string>();
   const gameIndex: number = Number(gameNumber); // corresponds to zustand store avatars state info index position for each game
   const [startTimer, setStartTimer] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (Number.isNaN(gameIndex)) {
+      navigate("/error");
+    }
+  }, [gameIndex]);
 
   const handleZoomin = () => {
     setCurrentImageScale((s) => s * 2);
@@ -36,7 +45,7 @@ export function PlayGame() {
   useEffect(() => {
     async function fetchFn() {
       const response = await fetch(`/api/games/${gameIndex}/gamestatus`);
-      if (!response.ok) <Navigate to={"/error"} />;
+      if (!response.ok) return navigate("/error");
       const data: { finished: boolean } = await response.json();
       if (data.finished) {
         allCharacterFound(gameIndex);
@@ -48,6 +57,10 @@ export function PlayGame() {
       }
     }
     fetchFn();
+    return () => {
+      resetState();
+      resetCharacterStore();
+    };
   }, []);
 
   useEffect(() => {
@@ -58,10 +71,6 @@ export function PlayGame() {
         currGameIndex: gameIndex,
       });
     }
-    return () => {
-      resetState();
-      resetCharacterStore();
-    };
   }, [startTimer]);
 
   return (

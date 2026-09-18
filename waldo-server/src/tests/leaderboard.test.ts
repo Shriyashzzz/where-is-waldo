@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "../routes/app";
 import config from "../config/config";
 import { Level } from "../../generated/prisma/client";
+import { charactersStore } from "../modals/characterStore";
 
 describe("leaderBoard route test", () => {
   let userAlice: { id: number };
@@ -14,6 +15,7 @@ describe("leaderBoard route test", () => {
   let gameGodlike: { id: number };
 
   beforeAll(async () => {
+    charactersStore.setAllFound(0);
     // fetch existing games
     gameEasy = await prisma.game.findUniqueOrThrow({
       where: { level: Level.Easy },
@@ -76,6 +78,7 @@ describe("leaderBoard route test", () => {
     await prisma.leaderBoard.deleteMany();
     await prisma.user.deleteMany();
     await prisma.$disconnect();
+    charactersStore.reset();
   });
 
   it("Get Easy Game LeaderBoards", (done) => {
@@ -104,6 +107,7 @@ describe("leaderBoard route test", () => {
       .post(`/api/games/0/leaderBoard/postScore`)
       .send({ userName: "TempUser", time: "0:0:0:1:234" });
     expect(res.status).toBe(200);
+
     const newRes = await request(app).get(
       `/api/games/0/leaderBoard/highScores`,
     );

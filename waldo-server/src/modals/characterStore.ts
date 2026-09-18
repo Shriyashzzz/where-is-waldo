@@ -11,7 +11,7 @@ interface CharactersState {
   getLength: () => number;
   isAllFound: (gameIndex: number) => boolean;
   setAllFound: (gameIndex: number) => void;
-  reset: () => void;
+  reset: () => boolean;
 }
 
 export const charactersStore: CharactersState = {
@@ -79,35 +79,41 @@ export const charactersStore: CharactersState = {
   },
 
   reset: () => {
-    charactersStore.avatars = [
-      {
-        YellowWaldo: false,
-        Dog: false,
-        GirlWaldo: false,
-        Waldo: false,
-        GandalfWaldo: false,
-      },
-      {
-        YellowWaldo: false,
-        Dog: false,
-        GirlWaldo: false,
-        Waldo: false,
-        GandalfWaldo: false,
-      },
-      {
-        YellowWaldo: false,
-        Dog: false,
-        GirlWaldo: false,
-        Waldo: false,
-        GandalfWaldo: false,
-      },
-      {
-        YellowWaldo: false,
-        Dog: false,
-        GirlWaldo: false,
-        Waldo: false,
-        GandalfWaldo: false,
-      },
-    ];
+    try {
+      charactersStore.avatars = [
+        {
+          YellowWaldo: false,
+          Dog: false,
+          GirlWaldo: false,
+          Waldo: false,
+          GandalfWaldo: false,
+        },
+        {
+          YellowWaldo: false,
+          Dog: false,
+          GirlWaldo: false,
+          Waldo: false,
+          GandalfWaldo: false,
+        },
+        {
+          YellowWaldo: false,
+          Dog: false,
+          GirlWaldo: false,
+          Waldo: false,
+          GandalfWaldo: false,
+        },
+        {
+          YellowWaldo: false,
+          Dog: false,
+          GirlWaldo: false,
+          Waldo: false,
+          GandalfWaldo: false,
+        },
+      ];
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   },
 };

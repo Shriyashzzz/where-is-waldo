@@ -61,6 +61,10 @@ class Queries {
         include: {
           user: true,
         },
+        omit: {
+          userId: true,
+          gameId: true,
+        },
         orderBy: [
           {
             time: "asc",

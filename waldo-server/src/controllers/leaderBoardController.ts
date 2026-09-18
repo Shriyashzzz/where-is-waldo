@@ -3,28 +3,13 @@ import {
   validationResult,
   type Result,
   matchedData,
-  param,
   body,
 } from "express-validator";
 import { AppError } from "../errors/AppError.js";
-import { charactersStore } from "../modals/characterStore.js";
 import queries from "../modals/query.js";
 import { formatError } from "../util/formatError";
-
-const validateGameIndex = [
-  param("index")
-    .trim()
-    .notEmpty()
-    .isNumeric()
-    .withMessage("Invalid Game Index value")
-    .custom((val) => {
-      if (charactersStore.getLength() <= val) {
-        throw new Error("index value not in range");
-      } else {
-        return val;
-      }
-    }),
-];
+import { validateGameIndex } from "./validation/universal.js";
+import { charactersStore } from "../modals/characterStore.js";
 
 const validateLeaderBoardStats = [
   body("userName")
@@ -81,6 +66,16 @@ export const leaderBoardController = {
       }
       const { userName, time, index } = matchedData(req);
       const numGameIndex = parseInt(index);
+
+      if (!charactersStore.isAllFound(numGameIndex))
+        return next(
+          new AppError(
+            "All Charachter's have not been found",
+            400,
+            false,
+            true,
+          ),
+        );
       const dbResponse = await queries.postLeaderBoardScore(
         userName,
         numGameIndex,
@@ -98,7 +93,6 @@ export const leaderBoardController = {
           ),
         );
       }
-      console.log(dbResponse.data);
       return res.status(200).json({ score: dbResponse.data?.score });
     },
   ],

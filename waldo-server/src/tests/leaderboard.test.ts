@@ -86,14 +86,10 @@ describe("leaderBoard route test", () => {
         expect(res.body).toEqual({
           leaderBoard: expect.arrayContaining([
             expect.objectContaining({
-              userId: userAlice.id,
-              gameId: gameEasy.id,
               level: "Easy",
               time: "00:45.23",
             }),
             expect.objectContaining({
-              userId: userBob.id,
-              gameId: gameEasy.id,
               level: "Easy",
               time: "00:52.10",
             }),
@@ -115,17 +111,14 @@ describe("leaderBoard route test", () => {
     expect(newRes.body).toEqual({
       leaderBoard: expect.arrayContaining([
         expect.objectContaining({
-          gameId: gameEasy.id,
           level: "Easy",
           time: "00:45.23",
         }),
         expect.objectContaining({
-          gameId: gameEasy.id,
           level: "Easy",
           time: "00:52.10",
         }),
         expect.objectContaining({
-          gameId: gameEasy.id,
           level: "Easy",
           time: "0:0:0:1:234",
         }),

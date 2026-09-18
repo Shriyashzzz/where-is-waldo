@@ -44,7 +44,7 @@ export function TimerDialog({ isOpen, setIsOpen, gameIndex, time }: Props) {
     const data = await response.json();
     console.log(data);
     setIsOpen(false);
-    navigate("/", { viewTransition: true });
+    navigate(`/leaderboard/${gameIndex}`, { viewTransition: true });
   };
 
   return (
@@ -89,6 +89,7 @@ export function TimerDialog({ isOpen, setIsOpen, gameIndex, time }: Props) {
           </AlertDialog.Cancel>
           <AlertDialog.Action>
             <Button
+              style={{ cursor: "pointer" }}
               variant="solid"
               color="red"
               onClick={() => addScoreToLeaderBoard()}

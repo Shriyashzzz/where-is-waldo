@@ -22,6 +22,7 @@ export interface CharacterStore {
   avatars: Array<Array<Avatar>>;
   updateAvatar: (newAvatar: Avatar[], index: number) => void;
   allCharacterFound: (gameIndex: number) => void;
+  resetCharacterStore: () => void;
 }
 
 export const useCharacter = create<CharacterStore>()((set) => ({
@@ -70,4 +71,39 @@ export const useCharacter = create<CharacterStore>()((set) => ({
       return { avatars: newState };
     });
   },
+  resetCharacterStore: () =>
+    set(() => {
+      return {
+        avatars: [
+          [
+            { img: WaldoAvatar1, name: "YellowWaldo", found: false },
+            { img: WaldoAvatar2, name: "Dog", found: false },
+            { img: WaldoAvatar3, name: "Waldo", found: false },
+            { img: WaldoAvatar4, name: "GirlWaldo", found: false },
+            { img: WaldoAvatar5, name: "GandalfWaldo", found: false },
+          ],
+          [
+            { img: WaldoAvatar1, name: "YellowWaldo", found: false },
+            { img: WaldoAvatar2, name: "Dog", found: false },
+            { img: WaldoAvatar3, name: "Waldo", found: false },
+            { img: WaldoAvatar4, name: "GirlWaldo", found: false },
+            { img: WaldoAvatar5, name: "GandalfWaldo", found: false },
+          ],
+          [
+            { img: WaldoAvatar1, name: "YellowWaldo", found: false },
+            { img: WaldoAvatar2, name: "Dog", found: false },
+            { img: WaldoAvatar3, name: "Waldo", found: false },
+            { img: WaldoAvatar4, name: "GirlWaldo", found: false },
+            { img: WaldoAvatar5, name: "GandalfWaldo", found: false },
+          ],
+          [
+            { img: WaldoAvatar1, name: "YellowWaldo", found: false },
+            { img: WaldoAvatar2, name: "Dog", found: false },
+            { img: WaldoAvatar3, name: "Waldo", found: false },
+            { img: WaldoAvatar4, name: "GirlWaldo", found: false },
+            { img: WaldoAvatar5, name: "GandalfWaldo", found: false },
+          ],
+        ],
+      };
+    }),
 }));

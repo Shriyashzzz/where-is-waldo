@@ -69,8 +69,6 @@ export function FoundAlert({
       }
 
       const data: Data = await res.json();
-      console.log(data);
-
       if (data.isCorrectCharacter) {
         const tempAvatar = [...avatars];
         tempAvatar[index].found = true;

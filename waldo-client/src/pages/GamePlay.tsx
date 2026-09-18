@@ -15,13 +15,14 @@ export interface OriginalCordinate {
 
 export function PlayGame() {
   const { isStart, isAllFound, updateState, resetState } = useGameState();
-  const { allCharacterFound } = useCharacter();
+  const { allCharacterFound, resetCharacterStore } = useCharacter();
   const imgContainer = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const [currentImgScale, setCurrentImageScale] = useState<number>(1);
   const { gameNumber } = useParams<string>();
   const gameIndex: number = Number(gameNumber); // corresponds to zustand store avatars state info index position for each game
   const [startTimer, setStartTimer] = useState<boolean>(false);
+
   const handleZoomin = () => {
     setCurrentImageScale((s) => s * 2);
   };
@@ -57,7 +58,10 @@ export function PlayGame() {
         currGameIndex: gameIndex,
       });
     }
-    return () => resetState();
+    return () => {
+      resetState();
+      resetCharacterStore();
+    };
   }, [startTimer]);
 
   return (

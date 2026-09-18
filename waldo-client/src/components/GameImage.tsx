@@ -194,7 +194,7 @@ export default function ImageContainer({
               <div
                 key={`${arr.xCord}-${arr.yCord}`}
                 style={{ left: `${leftPct}%`, top: `${topPct}%` }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center size-6  highlight highlight-variant-3 highlight-sky-600  pointer-events-none"
+                className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center sm:size-5 size-2  highlight highlight-variant-3 highlight-sky-600  pointer-events-none"
               >
                 <Check className="size-4 text-white" strokeWidth={4} />
               </div>

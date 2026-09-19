@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"cd waldo-client && npm run dev\" \"cd waldo-server && npm run dev\""
+    "dev": "concurrently \"cd waldo-client && npm run dev\" \"cd waldo-server && npm run dev\"",
+    "dev-client": "cd waldo-client && npm run dev",
+    "dev-server": "cd waldo-server && npm start"
   },
   "keywords": [],
   "author": "",

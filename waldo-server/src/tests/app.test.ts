@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../routes/app";
-import { prisma } from "../config/prisma";
-import { charactersStore } from "../modals/characterStore";
+import { prisma } from "../config/prisma.js";
+import { charactersStore } from "../modals/characterStore.js";
 
 describe("Coordinate verify for Waldo Easy ", () => {
   afterAll(async () => {

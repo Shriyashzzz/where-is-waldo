@@ -1,9 +1,8 @@
 import { prisma } from "../config/prisma";
 import request from "supertest";
-import { app } from "../routes/app";
-import config from "../config/config";
+import { app } from "../routes/app.js";
 import { Level } from "../../generated/prisma/client";
-import { charactersStore } from "../modals/characterStore";
+import { charactersStore } from "../modals/characterStore.js";
 
 describe("leaderBoard route test", () => {
   let userAlice: { id: number };

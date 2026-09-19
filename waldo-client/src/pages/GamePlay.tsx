@@ -44,7 +44,10 @@ export function PlayGame() {
   };
   useEffect(() => {
     async function fetchFn() {
-      const response = await fetch(`/api/games/${gameIndex}/gamestatus`);
+      const response = await fetch(`/api/games/${gameIndex}/gamestatus`, {
+        method: "GET",
+        credentials: "include",
+      });
       if (!response.ok) return navigate("/error");
       const data: { finished: boolean } = await response.json();
       if (data.finished) {

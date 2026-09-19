@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "npm install && tsx watch src/server.ts",
     "start": "tsx src/server.ts",
     "build": "tsc",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"

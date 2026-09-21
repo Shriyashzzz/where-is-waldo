@@ -2,10 +2,10 @@
   "name": "waldo-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "npm install && tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.ts",
     "build": "tsc",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },

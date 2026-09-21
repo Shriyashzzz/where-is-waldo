@@ -33,8 +33,8 @@ COPY --from=builder /app/generated ./generated
 COPY prisma ./prisma
 
 # Expose port
-EXPOSE 3000
-ENV NODE_ENV=production
+EXPOSE 8000
+ENV NODE_ENV=PROD
 
 # Run application
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/src/server.js"]

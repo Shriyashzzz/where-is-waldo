@@ -33,7 +33,7 @@ export function FoundAlert({
   setFoundCharachters,
   currentClickedCoordinate,
 }: Props) {
-  const { updateState, isAllFound } = useGameState();
+  const { updateState } = useGameState();
   const avatars = useCharacter((s) => s.avatars[gameIndex]);
   const setAvatar = useCharacter((s) => s.updateAvatar);
   const navigate = useNavigate();

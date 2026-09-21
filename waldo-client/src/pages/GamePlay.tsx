@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { SideCharachterWaldo } from "../components/SideWaldoCharachter.js";
 import { Button } from "@radix-ui/themes";
 import { ZoomInIcon, ZoomOutIcon } from "@radix-ui/react-icons";
-import { Navigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { MyStopwatch } from "../components/MyStopwatch.js";
 import { useGameState } from "../hooks/gameState.js";
 import { useCharacter } from "../hooks/store.js";
@@ -42,6 +42,8 @@ export function PlayGame() {
       setCurrentImageScale((s) => s / 2);
     }
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isStart: _isStart } = useGameState();
   useEffect(() => {
     async function fetchFn() {
       const response = await fetch(`/api/games/${gameIndex}/gamestatus`, {

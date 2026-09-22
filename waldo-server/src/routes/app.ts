@@ -1,6 +1,6 @@
-import { gameRouter } from "./game";
+import { gameRouter } from "./game.js";
 import express from "express";
-import { errorHandler } from "../middlewares/errorHandler";
+import { errorHandler } from "../middlewares/errorHandler.js";
 
 export const app = express();
 app.use(express.urlencoded({ extended: true }));

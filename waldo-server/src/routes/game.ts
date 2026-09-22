@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { coordinateRouter } from "./charachterCoordinate";
-import { getGameStatus } from "../controllers/getGameStatus";
-import { leaderBoardRouter } from "./leaderBoard";
-import { resetState } from "../controllers/resetState";
+import { coordinateRouter } from "./charachterCoordinate.js";
+import { getGameStatus } from "../controllers/getGameStatus.js";
+import { leaderBoardRouter } from "./leaderBoard.js";
+import { resetState } from "../controllers/resetState.js";
 
 export const gameRouter = Router({ mergeParams: true });
 

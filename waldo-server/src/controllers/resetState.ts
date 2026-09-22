@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
-import { validateGameIndex } from "./validation/universal";
+import { validateGameIndex } from "./validation/universal.js";
 import { matchedData, validationResult } from "express-validator";
-import { AppError } from "../errors/AppError";
-import { charactersStore } from "../modals/characterStore";
+import { AppError } from "../errors/AppError.js";
+import { charactersStore } from "../modals/characterStore.js";
 export const resetState = [
   ...validateGameIndex,
   (req: Request, res: Response, next: NextFunction) => {

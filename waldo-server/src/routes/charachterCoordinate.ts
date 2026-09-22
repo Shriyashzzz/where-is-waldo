@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkIfValidCoordinate } from "../controllers/checkIfValidCoordinate";
+import { checkIfValidCoordinate } from "../controllers/checkIfValidCoordinate.js";
 
 export const coordinateRouter = Router({ mergeParams: true });
 

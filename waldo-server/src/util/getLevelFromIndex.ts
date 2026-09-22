@@ -1,4 +1,4 @@
-import { Level } from "../../generated/prisma/enums";
+import { Level } from "../../generated/prisma/enums.js";
 
 export const getLevelFromIndex = (gameIndex: number) => {
   switch (gameIndex) {

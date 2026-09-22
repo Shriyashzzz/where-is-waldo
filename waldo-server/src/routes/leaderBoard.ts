@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { leaderBoardController } from "../controllers/leaderBoardController";
+import { leaderBoardController } from "../controllers/leaderBoardController.js";
 export const leaderBoardRouter = Router({ mergeParams: true });
 
 leaderBoardRouter.get("/highScores", leaderBoardController.getGameLeaderBoard);

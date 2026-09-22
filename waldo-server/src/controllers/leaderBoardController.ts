@@ -7,7 +7,7 @@ import {
 } from "express-validator";
 import { AppError } from "../errors/AppError.js";
 import queries from "../modals/query.js";
-import { formatError } from "../util/formatError";
+import { formatError } from "../util/formatError.js";
 import { validateGameIndex } from "./validation/universal.js";
 import { charactersStore } from "../modals/characterStore.js";
 

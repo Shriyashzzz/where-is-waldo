@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import { charactersStore } from "../modals/characterStore";
+import { charactersStore } from "../modals/characterStore.js";
 import { validationResult, param, body, matchedData } from "express-validator";
-import { AppError } from "../errors/AppError";
+import { AppError } from "../errors/AppError.js";
 
 const validationChain = [
   param("index")

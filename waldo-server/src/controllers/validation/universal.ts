@@ -1,5 +1,5 @@
 import { validationResult, matchedData, param } from "express-validator";
-import { charactersStore } from "../../modals/characterStore";
+import { charactersStore } from "../../modals/characterStore.js";
 export const validateGameIndex = [
   param("index")
     .trim()

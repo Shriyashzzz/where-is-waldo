@@ -1,7 +1,7 @@
-import type { Character, Level } from "../../generated/prisma/enums";
-import { prisma } from "../config/prisma";
-import { LogError } from "../errors/LogError";
-import { getLevelFromIndex } from "../util/getLevelFromIndex";
+import type { Character, Level } from "../../generated/prisma/enums.js";
+import { prisma } from "../config/prisma.js";
+import { LogError } from "../errors/LogError.js";
+import { getLevelFromIndex } from "../util/getLevelFromIndex.js";
 
 export interface DBResponse<T> {
   ok: boolean;

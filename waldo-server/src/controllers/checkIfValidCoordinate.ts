@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
 import { validationResult, matchedData, body, param } from "express-validator";
-import queries from "../modals/query";
-import { getLevelFromIndex } from "../util/getLevelFromIndex";
-import { Character } from "../../generated/prisma/enums";
-import { isWithInBounds } from "../util/isWithinBounds";
-import { charactersStore } from "../modals/characterStore";
-import { AppError } from "../errors/AppError";
+import queries from "../modals/query.js";
+import { getLevelFromIndex } from "../util/getLevelFromIndex.js";
+import { Character } from "../../generated/prisma/enums.js";
+import { isWithInBounds } from "../util/isWithinBounds.js";
+import { charactersStore } from "../modals/characterStore.js";
+import { AppError } from "../errors/AppError.js";
 
 const validationChain = [
   param("index")

@@ -22,24 +22,36 @@ export function LeaderBoardPage() {
   const { gameIndex } = useParams();
   const [leaderBoardScore, setLeaderBoardScore] = useState<Array<Score>>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
     async function fetchLeaderBoard() {
-      const response = await fetch(
-        `/api/games/${gameIndex}/leaderBoard/highScores`,
-        { method: "GET", credentials: "include" },
-      );
-      if (!response.ok) return navigate("/error");
-      const data = await response.json();
-      setLeaderBoardScore(data.leaderBoard);
-
-      setIsLoading(false);
+      try {
+        const response = await fetch(
+          `/api/games/${gameIndex}/leaderBoard/highScores`,
+          { method: "GET", credentials: "include" },
+        );
+        if (!response.ok) {
+          const data = await response.json();
+          console.log(data);
+          navigate("/error");
+          return;
+        }
+        const data = await response.json();
+        setLeaderBoardScore(data.leaderBoard);
+      } catch (err) {
+        console.log(err);
+        navigate("/error");
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchLeaderBoard();
   }, [gameIndex]);
+
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner style={{ marginTop: "4rem" }} size={"3"} />;
   }
-  if (leaderBoardScore && leaderBoardScore.length != 0)
+  if (leaderBoardScore && leaderBoardScore.length != 0) {
     return (
       <section className="flex flex-col w-4/5  items-center h-150 sm:mt-20 mt-3 overflow-y-auto">
         <div className="flex justify-evenly w-full text-5xl font-bold italic mb-3 ">
@@ -58,20 +70,24 @@ export function LeaderBoardPage() {
         })}
       </section>
     );
-  return (
-    <section className=" h-150 sm:mt-10 mt-3 w-4/5 flex justify-center items-center flex-col gap-5">
-      <h1 className="text-2xl h-fit italic highlight highlight-variant-4 after:bg-linear-to-tr highlight-spread-md after:from-sky-500 after:to-red-500">
-        {" "}
-        No scores recorded, be the first to beat this level ;&#41;
-      </h1>
-      <Button
-        style={{ width: "fit-content", cursor: "pointer" }}
-        color="red"
-        onClick={() => navigate(`/play/${gameIndex}`, { viewTransition: true })}
-      >
-        {" "}
-        <p className="italic">Let's Goo</p>
-      </Button>
-    </section>
-  );
+  } else {
+    return (
+      <section className=" h-150 sm:mt-10 mt-3 w-4/5 flex justify-center items-center flex-col gap-5">
+        <h1 className="text-2xl h-fit italic highlight highlight-variant-4 after:bg-linear-to-tr highlight-spread-md after:from-sky-500 after:to-red-500">
+          {" "}
+          No scores recorded, be the first to beat this level ;&#41;
+        </h1>
+        <Button
+          style={{ width: "fit-content", cursor: "pointer" }}
+          color="red"
+          onClick={() =>
+            navigate(`/play/${gameIndex}`, { viewTransition: true })
+          }
+        >
+          {" "}
+          <p className="italic">Let's Goo</p>
+        </Button>
+      </section>
+    );
+  }
 }

@@ -74,7 +74,7 @@ class Queries {
       return { ok: true, data: { leaderBoard: currLeaderBoard } };
     } catch (e) {
       LogError(e);
-
+      console.log(e);
       return { ok: false };
     }
   }

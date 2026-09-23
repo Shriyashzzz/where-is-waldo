@@ -35,7 +35,7 @@ export function LeaderBoardPage() {
       setIsLoading(false);
     }
     fetchLeaderBoard();
-  }, []);
+  }, [gameIndex]);
   if (isLoading) {
     return <Spinner />;
   }

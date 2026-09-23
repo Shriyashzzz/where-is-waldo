@@ -3,18 +3,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), "");
+export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss()],
-    envDir: "./",
-    server: {
-      proxy: {
-        "/api": {
-          target: env.VITE_SERVER_ADDRESS,
-          changeOrigin: true,
-        },
-      },
-    },
   };
 });

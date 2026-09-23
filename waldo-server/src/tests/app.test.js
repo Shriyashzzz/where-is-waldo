@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../routes/app";
+import { app } from "../routes/app.js";
 import { prisma } from "../config/prisma.js";
 import { charactersStore } from "../modals/characterStore.js";
 

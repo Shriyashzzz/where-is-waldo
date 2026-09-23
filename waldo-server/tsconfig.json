@@ -4,6 +4,7 @@
     // File Layout
     "rootDir": "./",
     "outDir": "./dist",
+    "allowJs": true,
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -45,5 +46,5 @@
     "resolveJsonModule": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "src/tests"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

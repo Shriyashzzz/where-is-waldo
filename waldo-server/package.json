@@ -31,10 +31,9 @@
     "@types/node": "^26.5.1",
     "@types/pg": "^8.23.1",
     "@types/supertest": "^7.2.1",
-    "jest": "^30.5.1",
+    "jest": "^30.5.2",
     "prisma": "^7.10.0",
     "supertest": "^7.2.2",
-    "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "tsx": "^4.23.13"
   }
 }

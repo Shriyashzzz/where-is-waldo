@@ -1,17 +1,17 @@
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.js";
 import request from "supertest";
 import { app } from "../routes/app.js";
-import { Level } from "../../generated/prisma/client";
+import { Level } from "../../generated/prisma/client.js";
 import { charactersStore } from "../modals/characterStore.js";
 
 describe("leaderBoard route test", () => {
-  let userAlice: { id: number };
-  let userBob: { id: number };
-  let userCharlie: { id: number };
-  let gameEasy: { id: number };
-  let gameMedium: { id: number };
-  let gameHard: { id: number };
-  let gameGodlike: { id: number };
+  let userAlice;
+  let userBob;
+  let userCharlie;
+  let gameEasy;
+  let gameMedium;
+  let gameHard;
+  let gameGodlike;
 
   beforeAll(async () => {
     charactersStore.setAllFound(0);

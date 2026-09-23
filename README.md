@@ -13,11 +13,23 @@ completion times per level.
 ![Game Page](./preview/gamePreview.png)
 ![Mobile Page](./preview/mobilePreview.png)
 
+# To run this locally
+
+_PS: fill up the .env file by referencing .env.example for both server and client side before running the build locally_
+_make sure to connect your postgres db with **ipv4 pool url** and **migrate & seed** character's coordinate_
+
 ```bash
-npm run dev
+cd waldo-server
+npx prisma migrate dev --name init_tables
+npx prima db seed
 ```
 
-_PS: Take a look at .env.example for both server and client side before running the build locally_
+**After migrating & seeding in-order**
+
+```bash
+cd ..
+npm run dev
+```
 
 ## How it works
 
@@ -58,6 +70,11 @@ where-is-waldo/
 
 - See `waldo-client/` for setup — talks to the server API for coordinate
   checks and leaderboard data.
+- React with Typescript
+- Radix UI for general componenets
+- Zustand for state management
+- React Timer Hook lib for stopwatch
+- Highlight Effect made by Forking and updating tailwind-highlights for v4 compatibility,[tailwind-highlights-v4!](https://www.npmjs.com/package/tailwindcss-highlights-v4)
 
 ## Getting started
 

@@ -1,15 +1,22 @@
+import { prisma } from "../config/prisma.js";
 import request from "supertest";
 import { app } from "../routes/app.js";
-import { prisma } from "../config/prisma.js";
 import { charactersStore } from "../modals/characterStore.js";
 
 describe("Coordinate verify for Waldo Easy ", () => {
+  let agent;
+
+  beforeAll(() => {
+    agent = request.agent(app);
+  });
+
   afterAll(async () => {
     await prisma.$disconnect();
     charactersStore.reset();
   });
+
   test(" waldo character exact correct coordinate", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 866, yCord: 925 })
@@ -26,7 +33,7 @@ describe("Coordinate verify for Waldo Easy ", () => {
   });
 
   test("waldo grace bounds + 10 for x axis", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 876, yCord: 925 })
@@ -41,8 +48,9 @@ describe("Coordinate verify for Waldo Easy ", () => {
         done,
       );
   });
+
   test("waldo grace bounds - 10 for x axis", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 856, yCord: 925 })
@@ -57,8 +65,9 @@ describe("Coordinate verify for Waldo Easy ", () => {
         done,
       );
   });
+
   test("waldo out of bounds x axis", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 952, yCord: 925 })
@@ -75,7 +84,7 @@ describe("Coordinate verify for Waldo Easy ", () => {
   });
 
   test("waldo grace bounds + 10 for y axis", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 866, yCord: 935 })
@@ -92,7 +101,7 @@ describe("Coordinate verify for Waldo Easy ", () => {
   });
 
   test("waldo grace bounds - 10 for y axis", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 866, yCord: 915 })
@@ -109,7 +118,7 @@ describe("Coordinate verify for Waldo Easy ", () => {
   });
 
   test("waldo out of bounds y axis", (done) => {
-    request(app)
+    agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 866, yCord: 1001 })
@@ -127,34 +136,40 @@ describe("Coordinate verify for Waldo Easy ", () => {
 });
 
 describe("Finding all charachters returns true for all found", () => {
+  let agent;
+
+  beforeAll(() => {
+    agent = request.agent(app);
+  });
+
   afterAll(async () => {
     await prisma.$disconnect();
     charactersStore.reset();
   });
 
   it("finding all charachters returns allFound true", async () => {
-    const waldo0 = await request(app)
+    const waldo0 = await agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Waldo", xCord: 866, yCord: 915 });
     expect(waldo0.status).toBe(200);
     expect(waldo0.body.isCorrectCharacter).toBe(true);
 
-    const dog0 = await request(app)
+    const dog0 = await agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "Dog", xCord: 1167, yCord: 390 });
     expect(dog0.status).toBe(200);
     expect(dog0.body.isCorrectCharacter).toBe(true);
 
-    const girlEasy = await request(app)
+    const girlEasy = await agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "GirlWaldo", xCord: 885, yCord: 765 });
     expect(girlEasy.status).toBe(200);
     expect(girlEasy.body.isCorrectCharacter).toBe(true);
 
-    const gandfalfEasy = await request(app)
+    const gandfalfEasy = await agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "GandalfWaldo", xCord: 1342, yCord: 978 });
@@ -162,7 +177,7 @@ describe("Finding all charachters returns true for all found", () => {
     expect(gandfalfEasy.body.isCorrectCharacter).toBe(true);
     expect(gandfalfEasy.body.allFound).toBe(false);
 
-    const yellowWaldo = await request(app)
+    const yellowWaldo = await agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "YellowWaldo", xCord: 1203, yCord: 1200 });
@@ -172,7 +187,7 @@ describe("Finding all charachters returns true for all found", () => {
   });
 
   it("Rejects further processing if all character's have been found", async () => {
-    const afterAllFoundReq = await request(app)
+    const afterAllFoundReq = await agent
       .post("/api/games/0/click")
       .type("form")
       .send({ character: "YellowWaldo", xCord: 1203, yCord: 1200 });

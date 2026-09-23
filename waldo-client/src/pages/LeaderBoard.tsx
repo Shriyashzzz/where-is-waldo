@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { TableRow } from "../components/TableRow";
 import { Spinner } from "@radix-ui/themes";
 import { Button } from "@radix-ui/themes";
+import { apiUrl } from "../util/api";
 
 interface User {
   id: number;
@@ -27,7 +28,7 @@ export function LeaderBoardPage() {
     async function fetchLeaderBoard() {
       try {
         const response = await fetch(
-          `/api/games/${gameIndex}/leaderBoard/highScores`,
+          apiUrl(`/api/games/${gameIndex}/leaderBoard/highScores`),
           { method: "GET", credentials: "include" },
         );
         if (!response.ok) {

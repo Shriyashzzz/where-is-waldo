@@ -2,6 +2,7 @@ import { Flex, Button, AlertDialog } from "@radix-ui/themes";
 import { Clock } from "lucide-react";
 import { Label } from "radix-ui";
 import { useNavigate } from "react-router";
+import { apiUrl } from "../util/api";
 
 type Props = {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export function TimerDialog({ isOpen, setIsOpen, gameIndex, time }: Props) {
       time: time,
     };
     const response = await fetch(
-      `/api/games/${gameIndex}/leaderBoard/postScore/`,
+      apiUrl(`/api/games/${gameIndex}/leaderBoard/postScore/`),
       {
         method: "POST",
         credentials: "include",

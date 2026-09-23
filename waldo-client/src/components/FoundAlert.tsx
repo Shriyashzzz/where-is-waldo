@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import type { FoundCharahters } from "./GameImage";
 import type { Coords } from "./GameImage";
 import { useGameState } from "../hooks/gameState";
+import { apiUrl } from "../util/api";
 
 interface Props {
   scaledCoordinate: OriginalCordinate | undefined;
@@ -47,7 +48,7 @@ export function FoundAlert({
 
     setPendingIndex(index);
     try {
-      const res = await fetch(`/api/games/${gameIndex}/click`, {
+      const res = await fetch(apiUrl(`/api/games/${gameIndex}/click`), {
         method: "POST",
         credentials: "include",
         headers: {

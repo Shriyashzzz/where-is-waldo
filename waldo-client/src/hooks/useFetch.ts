@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { apiUrl } from "../util/api";
 
 export function useFetch<T = unknown>(url: string, options = {}) {
   const [data, setData] = useState<T | null>(null);
@@ -11,7 +12,7 @@ export function useFetch<T = unknown>(url: string, options = {}) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(url, { ...options, signal });
+        const response = await fetch(apiUrl(url), { ...options, signal });
         if (!response.ok) {
           throw new Error(`HTTP Error! Status: ${response.status}`);
         }

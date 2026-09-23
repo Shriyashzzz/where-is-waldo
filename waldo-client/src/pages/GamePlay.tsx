@@ -8,6 +8,7 @@ import { MyStopwatch } from "../components/MyStopwatch.js";
 import { useGameState } from "../hooks/gameState.js";
 import { useCharacter } from "../hooks/store.js";
 import { useNavigate } from "react-router";
+import { apiUrl } from "../util/api.js";
 
 export interface OriginalCordinate {
   originalX: number;
@@ -46,10 +47,13 @@ export function PlayGame() {
   const { isStart: _isStart } = useGameState();
   useEffect(() => {
     async function fetchFn() {
-      const response = await fetch(`/api/games/${gameIndex}/gamestatus`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        apiUrl(`/api/games/${gameIndex}/gamestatus`),
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
       if (!response.ok) return navigate("/error");
       const data: { finished: boolean } = await response.json();
       if (data.finished) {

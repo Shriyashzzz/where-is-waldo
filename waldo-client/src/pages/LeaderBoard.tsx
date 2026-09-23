@@ -22,8 +22,8 @@ export function LeaderBoardPage() {
   const { gameIndex } = useParams();
   const [leaderBoardScore, setLeaderBoardScore] = useState<Array<Score>>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   useEffect(() => {
+    let cancelled = false;
     async function fetchLeaderBoard() {
       try {
         const response = await fetch(
@@ -31,21 +31,21 @@ export function LeaderBoardPage() {
           { method: "GET", credentials: "include" },
         );
         if (!response.ok) {
-          const data = await response.json();
-          console.log(data);
           navigate("/error");
           return;
         }
         const data = await response.json();
-        setLeaderBoardScore(data.leaderBoard);
+        if (!cancelled) setLeaderBoardScore(data.leaderBoard);
       } catch (err) {
-        console.log(err);
-        navigate("/error");
+        if (!cancelled) navigate("/error");
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     }
     fetchLeaderBoard();
+    return () => {
+      cancelled = true;
+    };
   }, [gameIndex]);
 
   if (isLoading) {
@@ -59,10 +59,10 @@ export function LeaderBoardPage() {
           <h2 className="text-red-600">Time</h2>
         </div>
 
-        {leaderBoardScore.map((scoreObj, index) => {
+        {leaderBoardScore.map((scoreObj) => {
           return (
             <TableRow
-              key={index}
+              key={scoreObj.id}
               username={scoreObj.user.name}
               time={scoreObj.time}
             />

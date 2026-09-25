@@ -25,7 +25,11 @@ app.use(
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 },
+    cookie: {
+      maxAge: 1000 * 60 * 60,
+      secure: config.ENV !== "DEV",
+      sameSite: config.ENV !== "DEV" ? "none" : "lax",
+    },
   }),
 );
 app.use((req, res, next) => {

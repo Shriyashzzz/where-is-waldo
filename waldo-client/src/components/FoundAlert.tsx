@@ -70,6 +70,7 @@ export function FoundAlert({
       }
 
       const data: Data = await res.json();
+      console.log(data);
       if (data.isCorrectCharacter) {
         const tempAvatar = [...avatars];
         tempAvatar[index].found = true;
@@ -84,6 +85,7 @@ export function FoundAlert({
         });
 
         if (data.allFound) {
+          console.log("all charachters have been found");
           allCharacterFound(gameIndex);
           updateState({ justFinished: true });
           updateState({ isAllFound: true });

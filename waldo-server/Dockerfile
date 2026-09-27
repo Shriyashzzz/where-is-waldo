@@ -18,6 +18,8 @@ FROM deps AS build
 # The real value is supplied at runtime via docker-compose.
 ARG DATABASE_URL="postgresql://user:password@localhost:5432/db"
 ENV DATABASE_URL=${DATABASE_URL}
+ARG REDIS_URL="redis://localhost:6379"
+ENV REDIS_URL=${REDIS_URL}
 COPY . .
 # Generate the Prisma client against your schema
 RUN npx prisma generate
@@ -37,6 +39,4 @@ COPY package*.json ./
 
 EXPOSE 8080
 
-# Calls node directly (not `npm start`) since the package.json start
-# script currently points at dist/server.ts instead of dist/server.js
 CMD ["node", "dist/src/server.js"]

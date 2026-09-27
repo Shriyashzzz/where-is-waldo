@@ -6,9 +6,12 @@ import config from "../config/config.js";
 import session from "express-session";
 import { charactersStore } from "../modals/characterStore.js";
 import { createInitialAvatars } from "../modals/characterStore.js";
+import redisClient from "../config/redis.js";
+import { RedisStore } from "connect-redis";
 
 export const app = express();
 app.use(express.urlencoded({ extended: true }));
+app.disable("x-powered-by");
 app.use(
   cors({
     origin:
@@ -22,6 +25,7 @@ app.use(express.json());
 app.set("trust proxy", true);
 app.use(
   session({
+    store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: true,

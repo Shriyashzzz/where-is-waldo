@@ -12,7 +12,10 @@ export function useFetch<T = unknown>(url: string, options = {}) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(apiUrl(url), { ...options, signal });
+        const response = await fetch(apiUrl(url), {
+          ...options,
+          signal,
+        });
         if (!response.ok) {
           throw new Error(`HTTP Error! Status: ${response.status}`);
         }

@@ -43,7 +43,6 @@ export function PlayGame() {
       setCurrentImageScale((s) => s / 2);
     }
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isStart: _isStart } = useGameState();
   useEffect(() => {
     async function fetchFn() {

@@ -20,6 +20,8 @@ ARG DATABASE_URL="postgresql://user:password@localhost:5432/db"
 ENV DATABASE_URL=${DATABASE_URL}
 ARG REDIS_URL="redis://localhost:6379"
 ENV REDIS_URL=${REDIS_URL}
+ARG SESSION_SECRET="your_session_signature"
+ENV SESSION_SECRET=${SESSION_SECRET}
 COPY . .
 # Generate the Prisma client against your schema
 RUN npx prisma generate

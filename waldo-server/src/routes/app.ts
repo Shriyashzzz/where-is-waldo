@@ -1,8 +1,8 @@
+import config from "../config/config.js";
 import { gameRouter } from "./game.js";
 import express from "express";
 import { errorHandler } from "../middlewares/errorHandler.js";
 import cors from "cors";
-import config from "../config/config.js";
 import session from "express-session";
 import { charactersStore } from "../modals/characterStore.js";
 import { createInitialAvatars } from "../modals/characterStore.js";
@@ -11,7 +11,6 @@ import { RedisStore } from "connect-redis";
 
 export const app = express();
 app.use(express.urlencoded({ extended: true }));
-app.disable("x-powered-by");
 app.use(
   cors({
     origin:
@@ -23,6 +22,7 @@ app.use(
 );
 app.use(express.json());
 app.set("trust proxy", true);
+const isProd = config.ENV !== "DEV";
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
@@ -31,11 +31,21 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 60,
-      secure: config.ENV !== "DEV",
-      sameSite: config.ENV !== "DEV" ? "none" : "lax",
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
     },
   }),
 );
+// TEMP DEBUG
+app.use((req, res, next) => {
+  console.log("---");
+  console.log("Method:", req.method, "Path:", req.originalUrl);
+  console.log("Raw Cookie header:", req.headers.cookie);
+  console.log("Resolved sessionID:", req.sessionID);
+  console.log("Had avatars already?", !!req.session.avatars);
+  next();
+});
+
 app.use((req, res, next) => {
   if (!req.session.avatars) req.session.avatars = createInitialAvatars();
   charactersStore.runInSession(req.session.avatars, next);

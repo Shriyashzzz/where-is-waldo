@@ -16,7 +16,7 @@ app.use(
     origin:
       config.ENV == "DEV"
         ? "http://localhost:5173"
-        : "https://focused-harmony-production-fbd2.up.railway.app",
+        : "https://where-is-waldo.shriyash.dev",
     credentials: true,
   }),
 );
@@ -32,19 +32,10 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60,
       secure: isProd,
-      sameSite: isProd ? "none" : "lax",
+      sameSite: "lax",
     },
   }),
 );
-// TEMP DEBUG
-app.use((req, res, next) => {
-  console.log("---");
-  console.log("Method:", req.method, "Path:", req.originalUrl);
-  console.log("Raw Cookie header:", req.headers.cookie);
-  console.log("Resolved sessionID:", req.sessionID);
-  console.log("Had avatars already?", !!req.session.avatars);
-  next();
-});
 
 app.use((req, res, next) => {
   if (!req.session.avatars) req.session.avatars = createInitialAvatars();
